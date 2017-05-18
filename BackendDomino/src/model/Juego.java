@@ -25,6 +25,7 @@ public class Juego implements Serializable {
         this.fichasJugadas = new ArrayList<Ficha>();
         this.fichasDelPozo = new ArrayList<Ficha>();
         this.jugadores = new ArrayList<Jugador>();
+        this.jugadoresOk = new ArrayList<Integer>();
         this.initJugadoresDelJuego(cantJugadores);
     }
     
@@ -75,15 +76,50 @@ public class Juego implements Serializable {
     public void setOpcionDeJuegoDer(int der){
         this.opDeJuegoALaDer = der;
     }
+
+    public int getOpDeJuegoALaIzq() {
+        return opDeJuegoALaIzq;
+    }
+
+    public int getOpDeJuegoALaDer() {
+        return opDeJuegoALaDer;
+    }
+
+    public ArrayList<Integer> getJugadoresOk() {
+        return jugadoresOk;
+    }
+    
+    public void setJugadoresOK(){
+        this.jugadoresOk = this.jugadoresQuePuedenJugar();
+    }
     
     public ArrayList<Integer> jugadoresQuePuedenJugar(){
         ArrayList<Integer> idsJugadores = new ArrayList<Integer>();
+        for(int i=0; i < this.getJugadores().size(); i++){
+            if(this.puedeJugar(this.getJugadores().get(i).getFichasDelJugador())){
+                idsJugadores.add(i+1);
+            }
+        }
         return idsJugadores;        
     }
     
+    private boolean puedeJugar(ArrayList<Ficha> fichasJugador){
+        boolean puede = false;
+        for(Ficha ficha : fichasJugador){
+            if( (ficha.getNumDer() == this.opDeJuegoALaDer) || (ficha.getNumDer() == this.opDeJuegoALaIzq) ||
+                    (ficha.getNumIzq() == this.opDeJuegoALaDer) || (ficha.getNumIzq() == this.opDeJuegoALaIzq)){
+                puede = true;                
+            }
+        }
+        return puede;
+    }
+    
+    
+        
+    
     @Override
     public String toString() {
-        return "Juego {" + "cantJugadores : " + cantJugadores + ", opDeJuegoALaIzq : " + opDeJuegoALaIzq + ", opDeJuegoALaDer : " + opDeJuegoALaDer + ", fichasJugadas : " + fichasJugadas.toString() + ", fichasDelPozo : " + fichasDelPozo.toString() + ", jugadores : " + jugadores.toString() + '}';
+        return "Juego {" + "cantJugadores : " + cantJugadores + ", opDeJuegoALaIzq : " + opDeJuegoALaIzq + ", opDeJuegoALaDer : " + opDeJuegoALaDer + ", fichasJugadas : " + fichasJugadas.toString() + ", jugadoresOk : " + jugadoresOk.toString() + ", fichasDelPozo : " + fichasDelPozo.toString() + ", jugadores : " + jugadores.toString() + '}';
     }
     
     

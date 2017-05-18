@@ -127,8 +127,22 @@ public class Control {
         this.juego.setOpcionDeJuegoDer(der);
     }
     
+    public boolean validarJugadaPoniendo(Jugada jugada){
+        int opIzq = this.juego.getOpDeJuegoALaIzq();
+        int opDer = this.juego.getOpDeJuegoALaDer();
+        Ficha ficha = jugada.getFicha();
+        if( (ficha.getNumIzq() == opIzq) || (ficha.getNumIzq() == opDer) || (ficha.getNumDer() == opIzq) || (ficha.getNumDer() == opDer)){
+            return true;
+        }else{
+            return false;
+        }
+    }
     
-
+    public void jugadoresHabilitados(){
+        this.juego.setJugadoresOK();
+    }
+    
+    
     public Juego getJuego() {
         return juego;
     }
