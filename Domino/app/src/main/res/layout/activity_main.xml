@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.domino.MainActivity">
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jugar"
+        tools:layout_editor_absoluteX="148dp"
+        tools:layout_editor_absoluteY="231dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="81dp"
+        android:layout_height="19dp"
+        tools:layout_editor_absoluteX="248dp"
+        tools:layout_editor_absoluteY="142dp"
+        android:layout_marginBottom="54dp"
+        android:layout_above="@+id/button"
+        android:layout_toEndOf="@+id/button"
+        android:entries="@array/cantidadJugadoresArray"
+        android:layout_marginStart="14dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Elija la cantidad de Jugadores"
+        tools:layout_editor_absoluteX="34dp"
+        tools:layout_editor_absoluteY="144dp"
+        android:layout_alignTop="@+id/spinner"
+        android:layout_toStartOf="@+id/spinner" />
+</RelativeLayout>
