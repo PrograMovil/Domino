@@ -13,6 +13,7 @@ import java.util.Queue;
 import java.util.Random;
 import model.Ficha;
 import model.Juego;
+import model.Jugada;
 
 /**
  *
@@ -93,4 +94,44 @@ public class Control {
         return listaDeFichas;
         
     }
+    
+    public void aplicarJugada(Jugada jugada){
+        int idJugador = jugada.getIdJugador();
+        int accion = jugada.getAccion();
+        Ficha ficha = jugada.getFicha();
+        switch(accion){
+            case 1 : {
+                System.out.println("Poniendo ficha : " + jugada.getFicha().toString());
+                this.juego.getFichasJugadas().add(ficha);
+                this.juego.getJugadores().get(idJugador - 1).getFichasDelJugador().remove(ficha);
+            }
+            break;
+            case 2 : {
+                System.out.println("Comiendo ficha : " + jugada.getFicha().toString());
+                this.juego.getFichasDelPozo().remove(ficha);
+                this.juego.getJugadores().get(idJugador - 1).getFichasDelJugador().add(ficha);                
+            }
+            break;
+        }
+    }
+    
+    public void setOpcionesDeJuego(int izq, int der){
+        this.juego.setOpcionesDeJuego(izq, der);
+    }
+    
+    public void setOpcionDeJuegoIzq(int izq){
+        this.juego.setOpcionDeJuegoIzq(izq);
+    }
+    
+    public void setOpcionDeJuegoDer(int der){
+        this.juego.setOpcionDeJuegoDer(der);
+    }
+    
+    
+
+    public Juego getJuego() {
+        return juego;
+    }
+    
+    
 }

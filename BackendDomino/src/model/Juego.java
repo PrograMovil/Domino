@@ -12,22 +12,18 @@ import java.util.ArrayList;
 public class Juego implements Serializable {
     
     int cantJugadores;
+    int opDeJuegoALaIzq;
+    int opDeJuegoALaDer;
     ArrayList<Ficha> fichasJugadas;
     ArrayList<Ficha> fichasDelPozo;
     ArrayList<Jugador> jugadores;
+    ArrayList<Integer> jugadoresOk;
+    
 
     public Juego(int cantJugadores) {
         this.cantJugadores = cantJugadores;
         this.fichasJugadas = new ArrayList<Ficha>();
         this.fichasDelPozo = new ArrayList<Ficha>();
-        this.jugadores = new ArrayList<Jugador>();
-        this.initJugadoresDelJuego(cantJugadores);
-    }
-
-    public Juego(int cantJugadores, ArrayList<Ficha> fichasDelPozo) {
-        this.cantJugadores = cantJugadores;
-        this.fichasDelPozo = fichasDelPozo;
-        this.fichasJugadas = new ArrayList<Ficha>();
         this.jugadores = new ArrayList<Jugador>();
         this.initJugadoresDelJuego(cantJugadores);
     }
@@ -66,12 +62,29 @@ public class Juego implements Serializable {
     public ArrayList<Jugador> getJugadores() {
         return jugadores;
     }
-
+    
+    public void setOpcionesDeJuego(int izq, int der){
+        this.opDeJuegoALaIzq = izq;
+        this.opDeJuegoALaDer = der;
+    }
+    
+    public void setOpcionDeJuegoIzq(int izq){
+        this.opDeJuegoALaIzq = izq;
+    }
+    
+    public void setOpcionDeJuegoDer(int der){
+        this.opDeJuegoALaDer = der;
+    }
+    
+    public ArrayList<Integer> jugadoresQuePuedenJugar(){
+        ArrayList<Integer> idsJugadores = new ArrayList<Integer>();
+        return idsJugadores;        
+    }
+    
     @Override
     public String toString() {
-        return "Juego {" + "cantJugadores : " + cantJugadores + ", fichasJugadas : " + fichasJugadas.toString() + ", fichasDelPozo : " + fichasDelPozo.toString() + ", jugadores : " + jugadores.toString() + '}';
+        return "Juego {" + "cantJugadores : " + cantJugadores + ", opDeJuegoALaIzq : " + opDeJuegoALaIzq + ", opDeJuegoALaDer : " + opDeJuegoALaDer + ", fichasJugadas : " + fichasJugadas.toString() + ", fichasDelPozo : " + fichasDelPozo.toString() + ", jugadores : " + jugadores.toString() + '}';
     }
-
     
     
     

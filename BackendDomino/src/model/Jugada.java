@@ -9,13 +9,31 @@ import java.io.Serializable;
 
 
 public class Jugada implements Serializable {
+    
+    int idJugador;
     Ficha ficha;
-    int accion; 
+    int accion; //  1 - poner ficha
+                //  2 - comer ficha
 
-    public Jugada(Ficha ficha, int accion) {
+    public Jugada(int idJugador, int accion) {
         this.ficha = ficha;
         this.accion = accion;
     }
+
+    public Jugada(int idJugador, Ficha ficha, int accion) {
+        this.idJugador = idJugador;
+        this.ficha = ficha;
+        this.accion = accion;
+    }
+
+    public int getIdJugador() {
+        return idJugador;
+    }
+
+    public void setIdJugador(int idJugador) {
+        this.idJugador = idJugador;
+    }
+    
 
     public Ficha getFicha() {
         return ficha;
