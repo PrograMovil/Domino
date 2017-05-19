@@ -1,6 +1,7 @@
 
 package server;
 
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -15,7 +16,8 @@ public class Server {
     ServerSocket serverSocket;
     ArrayList<ServerConnection> connections = new ArrayList<ServerConnection>();
     boolean serverRunning = true;
-    
+    Control ctrl;
+    Gson gson = new Gson();
     /**
      * @param args the command line arguments
      */
@@ -31,6 +33,7 @@ public class Server {
                 Socket socket = serverSocket.accept();   
                 ServerConnection serverConnection = new ServerConnection(socket,this);
                 serverConnection.start();
+                
                 connections.add(serverConnection);
             }            
         } catch (IOException ex) {
