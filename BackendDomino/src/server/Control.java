@@ -28,6 +28,7 @@ public class Control {
         this.initFichas();
         this.juego = new Juego(cantJugadores);
         this.repartirFichas(cantJugadores);
+        this.juego.setJugadorMano();
         System.out.println(this.juego.toString());
     }
     
@@ -142,6 +143,13 @@ public class Control {
         this.juego.setJugadoresOK();
     }
     
+    public boolean hayGanador(){
+        if(this.juego.getGanador() != 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
     
     public Juego getJuego() {
         return juego;
