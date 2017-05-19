@@ -55,8 +55,8 @@ public class ServerConnection extends Thread{
                 }
                 
                 String dataIncoming = dataIn.readUTF();
-                this.sendDataToAllClients(dataIncoming); 
                 System.out.println("Data recibida: " + dataIncoming);
+                this.sendDataToAllClients(dataIncoming);
             }
             
             this.closeAll();
