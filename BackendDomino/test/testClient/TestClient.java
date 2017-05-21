@@ -64,6 +64,13 @@ public class TestClient {
             
             Accion accion = new Accion();
             switch(data){
+                case "hay" : {
+                    accion.setTipo(0);
+                    accion.setMensaje("Consultando por juego iniciado!");
+                    accion.setError(0);
+                    clientConnection.sendDataToServer(this.gson.toJson(accion));
+                }
+                break;
                 case "init" : {
                     accion.setTipo(1);
                     accion.setMensaje("Juego iniciado!");

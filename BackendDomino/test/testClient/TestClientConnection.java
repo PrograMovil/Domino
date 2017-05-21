@@ -59,16 +59,19 @@ public class TestClientConnection extends Thread {
                     Accion dataIncoming = this.client.gson.fromJson(dataIn.readUTF(), Accion.class);
                     
                     switch(dataIncoming.getTipo()){
-                        
-                        case 2 : {
-                            Ficha ficha = this.client.gson.fromJson(dataIncoming.getData(), Ficha.class);
-                            System.out.println(dataIncoming.getMensaje() + " | Data : " + ficha.toString());
-                        }
-                        break;
                         case 100 : { // Caso de prueba!
                             System.out.println(dataIncoming.getData());
                         }
                         break;
+                        case 0 : {
+                            System.out.println(dataIncoming.getMensaje() + " | Data : " + dataIncoming.getData());
+                        }
+                        break;
+                        case 2 : {
+                            Ficha ficha = this.client.gson.fromJson(dataIncoming.getData(), Ficha.class);
+                            System.out.println(dataIncoming.getMensaje() + " | Data : " + ficha.toString());
+                        }
+                        break;                        
                         case 6 : {
                             System.out.println(dataIncoming.getMensaje());
                             break outerLoop;

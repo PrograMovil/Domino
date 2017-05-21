@@ -21,7 +21,6 @@ public class ServerConnection extends Thread{
     DataInputStream dataIn;
     DataOutputStream dataOut;
     boolean serverRunning = true;
-    Control ctrl;
     
     public ServerConnection(Socket socket, Server server){
         super("HiloDeLaConexionDelServer");
@@ -65,13 +64,37 @@ public class ServerConnection extends Thread{
                 System.out.println("Data recibida: " + dataIncoming.getMensaje());
                 Accion response = new Accion();
                 switch(dataIncoming.getTipo()){
+                    case 100 : { //Caso de pruebas!
+                        this.server.ctrl = new Control(4);
+                        response.setTipo(100);
+                        response.setData(this.server.gson.toJson(this.server.ctrl.getJuego()));
+                        this.sendDataToClient(this.server.gson.toJson(response));
+                    }
+                    break;
+                    case 0 : {
+                        this.server.ctrl = new Control(4);
+                        if(this.server.ctrl == null){
+                            response.setTipo(0);
+                            response.setMensaje("NO hay un juego iniciado");
+                            response.setError(0);
+                            response.setData("0");
+                            this.sendDataToClient(this.server.gson.toJson(response));
+                        }else{
+                            response.setTipo(0);
+                            response.setMensaje("Hay un juego iniciado");
+                            response.setError(0);
+                            response.setData("1");
+                            this.sendDataToClient(this.server.gson.toJson(response));
+                        }
+                    }
+                    break;
                     case 1 : {
                         Integer cantJugadores = this.server.gson.fromJson(dataIncoming.getData(), Integer.class) ;
-                        ctrl = new Control(cantJugadores);
-                        response.setTipo(5);
+                        this.server.ctrl = new Control(cantJugadores);
+                        response.setTipo(1);
                         response.setMensaje("Juego iniciado, esperando jugadores...");
                         response.setError(0);
-                        response.setData(this.server.gson.toJson(ctrl.juego.getJugadores().get(0).getId()));
+                        response.setData(this.server.gson.toJson(this.server.ctrl.juego.getJugadores().get(0).getId()));
                         this.sendDataToClient(this.server.gson.toJson(response));
                     }
                     break;
@@ -88,13 +111,6 @@ public class ServerConnection extends Thread{
                     break; 
                     case 3 : {
                         
-                    }
-                    break;
-                    case 100 : { //Caso de pruebas!
-                        this.ctrl = new Control(4);
-                        response.setTipo(100);
-                        response.setData(this.server.gson.toJson(ctrl.getJuego()));
-                        this.sendDataToClient(this.server.gson.toJson(response));
                     }
                     break;
                     case 4 : {
