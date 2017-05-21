@@ -65,10 +65,15 @@ public class TestClientConnection extends Thread {
                             System.out.println(dataIncoming.getMensaje() + " | Data : " + ficha.toString());
                         }
                         break;
+                        case 100 : { // Caso de prueba!
+                            System.out.println(dataIncoming.getData());
+                        }
+                        break;
                         case 6 : {
                             System.out.println(dataIncoming.getMensaje());
                             break outerLoop;
-                        }
+                        }                       
+                        
                     }
                     
 

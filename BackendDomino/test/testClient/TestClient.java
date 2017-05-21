@@ -89,6 +89,13 @@ public class TestClient {
                     clientConnection.sendDataToServer(this.gson.toJson(accion));
                 }
                 break;
+                case "test" : {
+                    accion.setTipo(100);
+                    accion.setMensaje("Prueba!");
+                    accion.setError(0);
+                    clientConnection.sendDataToServer(this.gson.toJson(accion));
+                }
+                break;
                 case "end" : {
                     accion.setTipo(4);
                     accion.setMensaje("Juego Terminado!");

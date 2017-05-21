@@ -90,6 +90,13 @@ public class ServerConnection extends Thread{
                         
                     }
                     break;
+                    case 100 : { //Caso de pruebas!
+                        this.ctrl = new Control(4);
+                        response.setTipo(100);
+                        response.setData(this.server.gson.toJson(ctrl.getJuego()));
+                        this.sendDataToClient(this.server.gson.toJson(response));
+                    }
+                    break;
                     case 4 : {
                         System.out.println("Terminando juego!...");
                         response.setTipo(6);
