@@ -1,5 +1,6 @@
 package com.domino;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -8,11 +9,14 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.domino.Model.Accion;
 import com.domino.Model.Juego;
 import com.google.gson.Gson;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -22,9 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Spinner spinnerCantidadJugadores;
     private Button botonJugar;
-    private Accion accion;
 
-    Conexion clientConnection;
 
 
     @Override
@@ -35,56 +37,147 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         botonJugar=(Button) findViewById(R.id.button);
         spinnerCantidadJugadores=(Spinner) findViewById(R.id.spinner);
-
+        new verificaJuegoIniciado().execute();
         botonJugar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                accion=new Accion();
                 Integer cantJugadores = Integer.parseInt((String) spinnerCantidadJugadores.getSelectedItem());
-                new InicioJuegoTask(accion, cantJugadores).execute();
+                new InicioJuegoTask(cantJugadores).execute();
             }
         });
     }
 
 
 
-    public class InicioJuegoTask extends AsyncTask<Void, Void, Accion> {
+    public class InicioJuegoTask extends AsyncTask<Void, Void, String> {
 
-        private Accion a;
+        private Accion accion;
         private Integer cantJugadores;
         Gson gson;
-        InicioJuegoTask(Accion a, Integer c){
+        InicioJuegoTask(Integer c){
             cantJugadores=c;
-            this.a=a;
+            accion=new Accion();
             gson=new Gson();
         }
 
         @Override
-        protected void onPostExecute(Accion result) {
-
-
-
+        protected void onPostExecute(String result) {
+            //Accion dataIncoming = gson.fromJson(result, Accion.class);
+            //Intent intent = new Intent(MainActivity.this, JuegoActivity.class);
+            //MainActivity.this.startActivity(intent);
+            new obtenerIdTask().execute();
 
         }
 
         @Override
-        protected Accion doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
             try {
-                Socket socket = new Socket("localhost",3333);
-                clientConnection = new Conexion(socket);
-                clientConnection.start();
+                Socket socket = new Socket("192.168.2.176",3333);
+                DataOutputStream dataOut=new DataOutputStream(socket.getOutputStream());
+                DataInputStream dataIn = new DataInputStream(socket.getInputStream());
                 accion.setTipo(1);
                 accion.setMensaje("Juego iniciado!");
                 accion.setData(this.gson.toJson(cantJugadores));
                 accion.setError(0);
-                clientConnection.sendDataToServer(this.gson.toJson(accion));
-                return accion;
+                dataOut.writeUTF(this.gson.toJson(accion));
+                dataOut.flush();
+                return dataIn.readUTF();
             } catch (IOException ex) {
-
+                ex.getMessage();
             }
 
             return null;
         }
     }
+
+
+    public class verificaJuegoIniciado extends AsyncTask<Void, Void, String> {
+
+            private Accion accion;
+            Gson gson;
+
+            verificaJuegoIniciado(){
+            accion=new Accion();
+            gson=new Gson();
+        }
+
+            @Override
+            protected void onPostExecute(String result) {
+                Accion dataIncoming = gson.fromJson(result, Accion.class);
+                String data=gson.fromJson(dataIncoming.getData(), String.class);
+                if(data.equals("1")){ //Hay un juego en curso por lo que lo envia al juego activity
+                    new obtenerIdTask().execute();
+                }
+
+
+
+
+        }
+
+            @Override
+            protected String doInBackground(Void... params) {
+            try {
+                Socket socket = new Socket("192.168.2.176",3333);
+                DataOutputStream dataOut=new DataOutputStream(socket.getOutputStream());
+                DataInputStream dataIn = new DataInputStream(socket.getInputStream());
+                accion.setTipo(0);
+                accion.setError(0);
+                dataOut.writeUTF(this.gson.toJson(accion));
+                dataOut.flush();
+                return dataIn.readUTF();
+            } catch (IOException ex) {
+                ex.getMessage();
+            }
+
+            return null;
+        }
+    }
+
+    public class obtenerIdTask extends AsyncTask<Void, Void, String> {
+
+        private Accion accion;
+        Gson gson;
+
+        obtenerIdTask(){
+            accion=new Accion();
+            gson=new Gson();
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Accion dataIncoming = gson.fromJson(result, Accion.class);
+            String data=gson.fromJson(dataIncoming.getData(), String.class);
+            if(data.equals("-1")){
+                Toast.makeText(MainActivity.this, "Juego lleno, intente mas tarde",Toast.LENGTH_LONG).show();
+            }
+            else {
+                Intent intent = new Intent(MainActivity.this, JuegoActivity.class);
+                intent.putExtra("idJugador", data);
+                MainActivity.this.startActivity(intent);
+            }
+
+
+
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                Socket socket = new Socket("192.168.2.176",3333);
+                DataOutputStream dataOut=new DataOutputStream(socket.getOutputStream());
+                DataInputStream dataIn = new DataInputStream(socket.getInputStream());
+                accion.setTipo(5);
+                accion.setError(0);
+                dataOut.writeUTF(this.gson.toJson(accion));
+                dataOut.flush();
+                return dataIn.readUTF();
+            } catch (IOException ex) {
+                ex.getMessage();
+            }
+
+            return null;
+        }
+    }
+
 
 }
