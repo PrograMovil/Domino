@@ -71,6 +71,13 @@ public class TestClient {
                     clientConnection.sendDataToServer(this.gson.toJson(accion));
                 }
                 break;
+                case "id" : {
+                    accion.setTipo(5);
+                    accion.setMensaje("Consultando id del jugador!");
+                    accion.setError(0);
+                    clientConnection.sendDataToServer(this.gson.toJson(accion));
+                }
+                break;
                 case "init" : {
                     accion.setTipo(1);
                     accion.setMensaje("Juego iniciado!");

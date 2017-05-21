@@ -18,6 +18,7 @@ public class Server {
     boolean serverRunning = true;
     Control ctrl;
     Gson gson = new Gson();
+    ArrayList<Integer> jugadoresConectados = new ArrayList<Integer>();
     /**
      * @param args the command line arguments
      */

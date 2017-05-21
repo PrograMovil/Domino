@@ -46,7 +46,7 @@ public class ServerConnection extends Thread{
     
     public void run(){
         try {
-            
+            System.out.println(this.server.connections.toString());
             dataOut = new DataOutputStream(this.socket.getOutputStream());
             dataIn = new DataInputStream(this.socket.getInputStream());
             
@@ -72,7 +72,6 @@ public class ServerConnection extends Thread{
                     }
                     break;
                     case 0 : {
-                        this.server.ctrl = new Control(4);
                         if(this.server.ctrl == null){
                             response.setTipo(0);
                             response.setMensaje("NO hay un juego iniciado");
@@ -94,6 +93,7 @@ public class ServerConnection extends Thread{
                         response.setTipo(1);
                         response.setMensaje("Juego iniciado, esperando jugadores...");
                         response.setError(0);
+                        this.server.jugadoresConectados.add(this.server.ctrl.juego.getJugadores().get(0).getId());
                         response.setData(this.server.gson.toJson(this.server.ctrl.juego.getJugadores().get(0).getId()));
                         this.sendDataToClient(this.server.gson.toJson(response));
                     }
@@ -114,6 +114,24 @@ public class ServerConnection extends Thread{
                     }
                     break;
                     case 4 : {
+                        
+                    }
+                    break;
+                    case 5 : {
+                        response.setTipo(5);
+                        response.setMensaje("ID del jugador");
+                        response.setError(0);
+                        int cantJugadores = this.server.ctrl.juego.getCantJugadores();
+                        if(this.server.jugadoresConectados.size() == cantJugadores){ // el juego ya tiene todos lo jugadores
+                            response.setData("-1"); //no puede unirse al juego
+                        }else{
+                            this.server.jugadoresConectados.add(this.server.jugadoresConectados.size());
+                            response.setData(String.valueOf(this.server.jugadoresConectados.size()));
+                        }                        
+                        this.sendDataToClient(this.server.gson.toJson(response));
+                    }
+                    break;
+                    case 6 : {
                         System.out.println("Terminando juego!...");
                         response.setTipo(6);
                         response.setMensaje("Terminado el juego.");
@@ -137,4 +155,11 @@ public class ServerConnection extends Thread{
         dataIn.close();            
         socket.close();
     }
+
+    @Override
+    public String toString() {
+        return "ServerConnection {" + "serverRunning : " + serverRunning + '}';
+    }
+    
+    
 }

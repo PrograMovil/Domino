@@ -67,11 +67,27 @@ public class TestClientConnection extends Thread {
                             System.out.println(dataIncoming.getMensaje() + " | Data : " + dataIncoming.getData());
                         }
                         break;
+                        case 1 : {
+                            System.out.println(dataIncoming.getMensaje() + " | Data : " + dataIncoming.getData());
+                        }
+                        break;
                         case 2 : {
                             Ficha ficha = this.client.gson.fromJson(dataIncoming.getData(), Ficha.class);
                             System.out.println(dataIncoming.getMensaje() + " | Data : " + ficha.toString());
                         }
-                        break;                        
+                        break;    
+                        case 3 : {
+                            
+                        }
+                        break;
+                        case 4 : {
+                            
+                        }
+                        break;
+                        case 5 : {
+                            System.out.println(dataIncoming.getMensaje() + " | Data : " + dataIncoming.getData());
+                        }
+                        break;
                         case 6 : {
                             System.out.println(dataIncoming.getMensaje());
                             break outerLoop;
