@@ -12,20 +12,19 @@ public class Jugada implements Serializable {
     
     int idJugador;
     Ficha ficha;
-    int accion; //  1 - poner ficha
-                //  2 - comer ficha
+    Accion accion; 
 
-    public Jugada(int idJugador, int accion) {
+    public Jugada(int idJugador, Ficha ficha) {
+        this.idJugador = idJugador;
         this.ficha = ficha;
-        this.accion = accion;
     }
 
-    public Jugada(int idJugador, Ficha ficha, int accion) {
+    public Jugada(int idJugador, Ficha ficha, Accion accion) {
         this.idJugador = idJugador;
         this.ficha = ficha;
         this.accion = accion;
     }
-
+    
     public int getIdJugador() {
         return idJugador;
     }
@@ -43,17 +42,17 @@ public class Jugada implements Serializable {
         this.ficha = ficha;
     }
 
-    public int getAccion() {
+    public Accion getAccion() {
         return accion;
     }
 
-    public void setAccion(int accion) {
+    public void setAccion(Accion accion) {
         this.accion = accion;
     }
 
     @Override
     public String toString() {
-        return "Jugada {" + "ficha : " + ficha.toString() + ", accion : " + accion + '}';
+        return "Jugada {" + "ficha : " + ficha.toString() + ", accion : " + accion.toString() + '}';
     }
     
     
