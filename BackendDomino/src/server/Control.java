@@ -5,6 +5,7 @@
  */
 package server;
 
+import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -24,6 +25,7 @@ public class Control {
     
     ArrayList<Ficha> fichas;
     Juego juego;
+    Gson gson = new Gson();
     
     public Control(int cantJugadores) {
         this.initFichas();
@@ -97,24 +99,27 @@ public class Control {
         
     }
     
-    public void aplicarJugada(Jugada jugada){
+    public boolean aplicarJugada(Accion accion){
+        Jugada jugada = gson.fromJson(accion.getData(), Jugada.class);
         int idJugador = jugada.getIdJugador();
-        Accion accion = jugada.getAccion();
         Ficha ficha = jugada.getFicha();
         switch(accion.getTipo()){
             case 2 : {
                 System.out.println("Poniendo ficha : " + jugada.getFicha().toString());
-                this.juego.getFichasJugadas().add(ficha);
-                this.juego.getJugadores().get(idJugador - 1).getFichasDelJugador().remove(ficha);
+                if( (this.juego.getFichasJugadas().add(ficha)) && (this.juego.getJugadores().get(idJugador - 1).getFichasDelJugador().remove(ficha)) ){
+                    return true;
+                }
             }
             break;
             case 3 : {
                 System.out.println("Comiendo ficha : " + jugada.getFicha().toString());
-                this.juego.getFichasDelPozo().remove(ficha);
-                this.juego.getJugadores().get(idJugador - 1).getFichasDelJugador().add(ficha);                
+                if((this.juego.getFichasDelPozo().remove(ficha)) && (this.juego.getJugadores().get(idJugador - 1).getFichasDelJugador().add(ficha)) ){
+                    return true;
+                }
             }
             break;
         }
+        return false;
     }
     
     public void setOpcionesDeJuego(int izq, int der){

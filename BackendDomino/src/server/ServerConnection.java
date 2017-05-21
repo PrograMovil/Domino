@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import model.Accion;
 import model.Ficha;
 import model.Juego;
+import model.Jugada;
 
 
 public class ServerConnection extends Thread{
@@ -99,22 +100,39 @@ public class ServerConnection extends Thread{
                     }
                     break;
                     case 2 : {
-                        Ficha ficha = this.server.gson.fromJson(dataIncoming.getData(), Ficha.class);
-                        System.out.println("Poniendo ficha: " + ficha.toString());
+                        System.out.println("Poniendo ficha: " + dataIncoming.getData());
                         response.setTipo(2);
-                        response.setMensaje("Ficha puesta!");
-                        response.setError(0);                        
-                        response.setData(this.server.gson.toJson(ficha));
-                        this.sendDataToClient(this.server.gson.toJson(response));
-                        
+                        if(this.server.ctrl.aplicarJugada(dataIncoming)){
+                            response.setMensaje("Ficha puesta!");
+                            response.setError(0);
+                        }else{
+                            response.setMensaje("ERROR: No se pudo poner la ficha!");
+                            response.setError(1);
+                        }                       
+                        response.setData(this.server.gson.toJson(this.server.ctrl.juego));
+                        this.sendDataToClient(this.server.gson.toJson(response));                        
                     }
                     break; 
                     case 3 : {
-                        
+                        System.out.println("Comiendo ficha: " + dataIncoming.getData());
+                        response.setTipo(2);
+                        if(this.server.ctrl.aplicarJugada(dataIncoming)){
+                            response.setMensaje("Ficha comida!");
+                            response.setError(0);
+                        }else{
+                            response.setMensaje("ERROR: No se pudo comer la ficha!");
+                            response.setError(1);
+                        }                       
+                        response.setData(this.server.gson.toJson(this.server.ctrl.juego));
+                        this.sendDataToClient(this.server.gson.toJson(response));
                     }
                     break;
                     case 4 : {
-                        
+                        response.setTipo(5);
+                        response.setMensaje("Estado del Juego");
+                        response.setError(0);
+                        response.setData(this.server.gson.toJson(this.server.ctrl.juego));
+                        this.sendDataToAllClients(this.server.gson.toJson(response));
                     }
                     break;
                     case 5 : {
