@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 
 public class Juego implements Serializable {
-    
+
     int cantJugadores;
     int opDeJuegoALaIzq;
     int opDeJuegoALaDer;
@@ -20,8 +20,8 @@ public class Juego implements Serializable {
     ArrayList<Ficha> fichasJugadas;
     ArrayList<Ficha> fichasDelPozo;
     ArrayList<Jugador> jugadores;
-    
-    
+
+
     public Juego(int cantJugadores) {
         this.cantJugadores = cantJugadores;
         this.fichasJugadas = new ArrayList<Ficha>();
@@ -32,7 +32,7 @@ public class Juego implements Serializable {
         this.mano = -1;
         this.ganador = 0;
     }
-    
+
     private void initJugadoresDelJuego(int cantJugadores){
         for(int i=1; i <= cantJugadores; i++){
             Jugador nuevo = new Jugador(i);
@@ -67,16 +67,16 @@ public class Juego implements Serializable {
     public ArrayList<Jugador> getJugadores() {
         return jugadores;
     }
-    
+
     public void setOpcionesDeJuego(int izq, int der){
         this.opDeJuegoALaIzq = izq;
         this.opDeJuegoALaDer = der;
     }
-    
+
     public void setOpcionDeJuegoIzq(int izq){
         this.opDeJuegoALaIzq = izq;
     }
-    
+
     public void setOpcionDeJuegoDer(int der){
         this.opDeJuegoALaDer = der;
     }
@@ -92,7 +92,7 @@ public class Juego implements Serializable {
     public ArrayList<Integer> getJugadoresOk() {
         return jugadoresOk;
     }
-    
+
     public void setJugadoresOK(){
         this.jugadoresOk = this.jugadoresQuePuedenJugar();
     }
@@ -104,8 +104,8 @@ public class Juego implements Serializable {
     public int getGanador() {
         return ganador;
     }
-    
-        
+
+
     public ArrayList<Integer> jugadoresQuePuedenJugar(){
         ArrayList<Integer> idsJugadores = new ArrayList<Integer>();
         for(int i=0; i < this.getJugadores().size(); i++){
@@ -113,20 +113,20 @@ public class Juego implements Serializable {
                 idsJugadores.add(i+1);
             }
         }
-        return idsJugadores;        
+        return idsJugadores;
     }
-    
+
     private boolean puedeJugar(ArrayList<Ficha> fichasJugador){
         boolean puede = false;
         for(Ficha ficha : fichasJugador){
             if( (ficha.getNumDer() == this.opDeJuegoALaDer) || (ficha.getNumDer() == this.opDeJuegoALaIzq) ||
                     (ficha.getNumIzq() == this.opDeJuegoALaDer) || (ficha.getNumIzq() == this.opDeJuegoALaIzq)){
-                puede = true;                
+                puede = true;
             }
         }
         return puede;
     }
-    
+
     public void setJugadorMano(){
         int mano = 6;
         ArrayList<Jugador> jugadores = this.jugadores;
@@ -144,12 +144,12 @@ public class Juego implements Serializable {
                 }
             }
             mano--;
-        }        
+        }
         if(this.mano == -1){
             this.manoAlternativa();
         }
     }
-    
+
     private void manoAlternativa(){
         int izq = 6;
         int der = 6;
@@ -172,7 +172,7 @@ public class Juego implements Serializable {
             izq--;
         }
     }
-    
+
     public void verificarGane(){
         for(int i=0; i < this.jugadores.size(); i++){
             if(this.jugadores.get(i).getFichasDelJugador().size() == 0){
@@ -185,6 +185,6 @@ public class Juego implements Serializable {
     public String toString() {
         return "Juego {" + "cantJugadores : " + cantJugadores + ", opDeJuegoALaIzq : " + opDeJuegoALaIzq + ", opDeJuegoALaDer : " + opDeJuegoALaDer + ", jugadoresOk : " + jugadoresOk.toString() + ", mano : " + mano + ", ganador : " + ganador + ", fichasJugadas : " + fichasJugadas.toString() + ", fichasDelPozo : " + fichasDelPozo.toString() + ", jugadores : " + jugadores.toString() + '}';
     }
-   
-    
+
+
 }

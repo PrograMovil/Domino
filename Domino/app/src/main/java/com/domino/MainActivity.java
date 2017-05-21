@@ -62,10 +62,12 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            //Accion dataIncoming = gson.fromJson(result, Accion.class);
-            //Intent intent = new Intent(MainActivity.this, JuegoActivity.class);
-            //MainActivity.this.startActivity(intent);
-            new obtenerIdTask().execute();
+            Accion dataIncoming = gson.fromJson(result, Accion.class);
+            String data=gson.fromJson(dataIncoming.getData(), String.class);
+            Intent intent = new Intent(MainActivity.this, JuegoActivity.class);
+            intent.putExtra("idJugador", data);
+            MainActivity.this.startActivity(intent);
+
 
         }
 
@@ -89,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
-
 
     public class verificaJuegoIniciado extends AsyncTask<Void, Void, String> {
 
@@ -149,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
             String data=gson.fromJson(dataIncoming.getData(), String.class);
             if(data.equals("-1")){
                 Toast.makeText(MainActivity.this, "Juego lleno, intente mas tarde",Toast.LENGTH_LONG).show();
+                botonJugar.setEnabled(false);
             }
             else {
                 Intent intent = new Intent(MainActivity.this, JuegoActivity.class);

@@ -9,22 +9,15 @@ import java.io.Serializable;
 
 
 public class Jugada implements Serializable {
-    
+
     int idJugador;
     Ficha ficha;
-    Accion accion; 
 
     public Jugada(int idJugador, Ficha ficha) {
         this.idJugador = idJugador;
         this.ficha = ficha;
     }
 
-    public Jugada(int idJugador, Ficha ficha, Accion accion) {
-        this.idJugador = idJugador;
-        this.ficha = ficha;
-        this.accion = accion;
-    }
-    
     public int getIdJugador() {
         return idJugador;
     }
@@ -32,7 +25,7 @@ public class Jugada implements Serializable {
     public void setIdJugador(int idJugador) {
         this.idJugador = idJugador;
     }
-    
+
 
     public Ficha getFicha() {
         return ficha;
@@ -42,19 +35,9 @@ public class Jugada implements Serializable {
         this.ficha = ficha;
     }
 
-    public Accion getAccion() {
-        return accion;
-    }
-
-    public void setAccion(Accion accion) {
-        this.accion = accion;
-    }
-
     @Override
     public String toString() {
-        return "Jugada {" + "ficha : " + ficha.toString() + ", accion : " + accion.toString() + '}';
+        return "Jugada {" + "idJugador : " + idJugador + ", ficha : " + ficha + '}';
     }
-    
-    
-    
+
 }

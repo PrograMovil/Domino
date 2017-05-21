@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 
 public class Jugador implements Serializable {
-    
+
     int id;
     ArrayList<Ficha> fichasDelJugador;
 
@@ -39,6 +39,6 @@ public class Jugador implements Serializable {
     public String toString() {
         return "Jugador{" + "id : " + id + ", fichasDelJugador : " + fichasDelJugador.toString() + '}';
     }
-    
-    
+
+
 }

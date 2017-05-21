@@ -51,6 +51,6 @@ public class Ficha implements Serializable{
     public String toString() {
         return "Ficha {" + "numIzq : " + numIzq + ", numDer : " + numDer + ", esDoble : " + esDoble + '}';
     }
-    
-    
+
+
 }
