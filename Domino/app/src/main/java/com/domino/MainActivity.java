@@ -26,7 +26,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Spinner spinnerCantidadJugadores;
     private Button botonJugar;
-
+    private static DataOutputStream dataOut;
+    private static DataInputStream dataIn;
 
 
     @Override
@@ -37,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         botonJugar=(Button) findViewById(R.id.button);
         spinnerCantidadJugadores=(Spinner) findViewById(R.id.spinner);
+
+
         new verificaJuegoIniciado().execute();
         botonJugar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
         private Accion accion;
         private Integer cantJugadores;
         Gson gson;
+        Socket socket;
+
+
         InicioJuegoTask(Integer c){
             cantJugadores=c;
             accion=new Accion();
@@ -63,9 +69,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             Accion dataIncoming = gson.fromJson(result, Accion.class);
-            String data=gson.fromJson(dataIncoming.getData(), String.class);
+            String idJ=gson.fromJson(dataIncoming.getData(), String.class);
             Intent intent = new Intent(MainActivity.this, JuegoActivity.class);
-            intent.putExtra("idJugador", data);
+            intent.putExtra("idJugador", idJ);
             MainActivity.this.startActivity(intent);
 
 
@@ -74,9 +80,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... params) {
             try {
-                Socket socket = new Socket("192.168.2.176",3333);
-                DataOutputStream dataOut=new DataOutputStream(socket.getOutputStream());
-                DataInputStream dataIn = new DataInputStream(socket.getInputStream());
+
                 accion.setTipo(1);
                 accion.setMensaje("Juego iniciado!");
                 accion.setData(this.gson.toJson(cantJugadores));
@@ -106,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
             protected void onPostExecute(String result) {
                 Accion dataIncoming = gson.fromJson(result, Accion.class);
                 String data=gson.fromJson(dataIncoming.getData(), String.class);
+
                 if(data.equals("1")){ //Hay un juego en curso por lo que lo envia al juego activity
                     new obtenerIdTask().execute();
                 }
@@ -118,9 +123,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected String doInBackground(Void... params) {
             try {
-                Socket socket = new Socket("192.168.2.176",3333);
-                DataOutputStream dataOut=new DataOutputStream(socket.getOutputStream());
-                DataInputStream dataIn = new DataInputStream(socket.getInputStream());
+                Socket socket = null;
+                socket = new Socket("192.168.2.176",3333);
+                dataOut=new DataOutputStream(socket.getOutputStream());
+                dataIn = new DataInputStream(socket.getInputStream());
+
                 accion.setTipo(0);
                 accion.setError(0);
                 dataOut.writeUTF(this.gson.toJson(accion));
@@ -165,9 +172,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... params) {
             try {
-                Socket socket = new Socket("192.168.2.176",3333);
-                DataOutputStream dataOut=new DataOutputStream(socket.getOutputStream());
-                DataInputStream dataIn = new DataInputStream(socket.getInputStream());
                 accion.setTipo(5);
                 accion.setError(0);
                 dataOut.writeUTF(this.gson.toJson(accion));
@@ -182,4 +186,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public static DataOutputStream getDataOut() {
+        return dataOut;
+    }
+
+    public static DataInputStream getDataIn() {
+        return dataIn;
+    }
 }
