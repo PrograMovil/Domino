@@ -112,6 +112,7 @@ public class Control {
                 if( (this.juego.getFichasJugadas().add(ficha)) && (this.juego.getJugadores().get(idJugador - 1).getFichasDelJugador().remove(ficha)) ){
                     this.jugadoresHabilitados();
                     this.setSiguienteTurno();
+                    //cambiar las opciones de juego
                     if(ficha.getNumIzq() == this.juego.getOpDeJuegoALaIzq()){
                         this.setOpcionDeJuegoIzq(ficha.getNumDer());
                     }else if(ficha.getNumDer() == this.juego.getOpDeJuegoALaIzq()){
@@ -121,6 +122,8 @@ public class Control {
                     }else if(ficha.getNumDer() == this.juego.getOpDeJuegoALaDer()){
                         this.setOpcionDeJuegoDer(ficha.getNumIzq());
                     }
+                    //verificar gane
+                    this.juego.verificarGane();
                     return true;
                 }
             }
