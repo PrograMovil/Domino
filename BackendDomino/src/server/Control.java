@@ -32,6 +32,8 @@ public class Control {
         this.juego = new Juego(cantJugadores);
         this.repartirFichas(cantJugadores);
         this.juego.setJugadorMano();
+        this.initTurno();
+        this.jugadoresHabilitados();
         System.out.println(this.juego.toString());
     }
     
@@ -106,7 +108,19 @@ public class Control {
         switch(accion.getTipo()){
             case 2 : {
                 System.out.println("Poniendo ficha : " + jugada.getFicha().toString());
+                
                 if( (this.juego.getFichasJugadas().add(ficha)) && (this.juego.getJugadores().get(idJugador - 1).getFichasDelJugador().remove(ficha)) ){
+                    this.jugadoresHabilitados();
+                    this.setSiguienteTurno();
+                    if(ficha.getNumIzq() == this.juego.getOpDeJuegoALaIzq()){
+                        this.setOpcionDeJuegoIzq(ficha.getNumDer());
+                    }else if(ficha.getNumDer() == this.juego.getOpDeJuegoALaIzq()){
+                        this.setOpcionDeJuegoIzq(ficha.getNumIzq());
+                    }else if(ficha.getNumIzq() == this.juego.getOpDeJuegoALaDer()){
+                        this.setOpcionDeJuegoDer(ficha.getNumDer());
+                    }else if(ficha.getNumDer() == this.juego.getOpDeJuegoALaDer()){
+                        this.setOpcionDeJuegoDer(ficha.getNumIzq());
+                    }
                     return true;
                 }
             }
@@ -161,5 +175,15 @@ public class Control {
         return juego;
     }
     
+    public void initTurno(){
+        this.juego.setTurno(this.juego.getMano());
+    }
     
+    public void setSiguienteTurno(){
+        if(this.juego.getTurno() < this.juego.getCantJugadores()){
+            this.juego.setTurno(this.juego.getTurno() + 1);
+        }else if(this.juego.getTurno() == this.juego.getCantJugadores()){
+            this.juego.setTurno(1);
+        }
+    }
 }

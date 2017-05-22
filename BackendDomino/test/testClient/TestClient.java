@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Accion;
 import model.Ficha;
+import model.Jugada;
 
 
 public class TestClient {
@@ -91,8 +92,8 @@ public class TestClient {
                     accion.setTipo(2);
                     accion.setMensaje("Poner ficha!");
                     accion.setError(0);
-                    Ficha ficha = new Ficha(6,6);
-                    accion.setData(this.gson.toJson(ficha));
+                    Jugada jugada = new Jugada(1,new Ficha(6,6));
+                    accion.setData(this.gson.toJson(jugada));
                     clientConnection.sendDataToServer(this.gson.toJson(accion));
                 }
                 break;

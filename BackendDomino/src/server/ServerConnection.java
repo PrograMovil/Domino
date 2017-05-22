@@ -89,7 +89,7 @@ public class ServerConnection extends Thread{
                     }
                     break;
                     case 1 : {
-                        Integer cantJugadores = this.server.gson.fromJson(dataIncoming.getData(), Integer.class) ;
+                        Integer cantJugadores = this.server.gson.fromJson(dataIncoming.getData(), Integer.class);
                         this.server.ctrl = new Control(cantJugadores);
                         response.setTipo(1);
                         response.setMensaje("Juego iniciado, esperando jugadores...");
@@ -100,15 +100,21 @@ public class ServerConnection extends Thread{
                     }
                     break;
                     case 2 : {
-                        System.out.println("Poniendo ficha: " + dataIncoming.getData());
+                        Jugada jugada = this.server.gson.fromJson(dataIncoming.getData(), Jugada.class);
+                        System.out.println("Poniendo ficha de: " + jugada.toString());
                         response.setTipo(2);
-                        if(this.server.ctrl.aplicarJugada(dataIncoming)){
-                            response.setMensaje("Ficha puesta!");
-                            response.setError(0);
+                        if(this.server.ctrl.validarJugadaPoniendo(jugada)){
+                            if(this.server.ctrl.aplicarJugada(dataIncoming)){
+                                response.setMensaje("Ficha puesta!");
+                                response.setError(0);
+                            }else{
+                                response.setMensaje("ERROR: No se pudo poner la ficha!");
+                                response.setError(1);
+                            }
                         }else{
-                            response.setMensaje("ERROR: No se pudo poner la ficha!");
+                            response.setMensaje("ERROR: jugada no valida!");
                             response.setError(1);
-                        }                       
+                        }
                         response.setData(this.server.gson.toJson(this.server.ctrl.juego));
                         this.sendDataToClient(this.server.gson.toJson(response));                        
                     }

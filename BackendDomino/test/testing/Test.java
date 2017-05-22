@@ -25,8 +25,8 @@ public class Test {
         
         Control ctrl = new Control(2);
         Juego game = ctrl.getJuego();
-        Jugador j1 = game.getJugadores().get(0);
-        Jugador j2 = game.getJugadores().get(1);
+//        Jugador j1 = game.getJugadores().get(0);
+//        Jugador j2 = game.getJugadores().get(1);
 //        Jugador j3 = game.getJugadores().get(2);
         
 //        Jugada ju1 = new Jugada(1,j1.getFichasDelJugador().get(0),1);
@@ -35,12 +35,12 @@ public class Test {
 //        ctrl.aplicarJugada(ju1);
 //        ctrl.aplicarJugada(ju2);
 //        System.out.println(game.toString());
-        System.out.println(j1.getId());
-        System.out.println(j1.getFichasDelJugador().toString());
-        j1.getFichasDelJugador().clear();
-        game.verificarGane();
-        System.out.println(j1.getId());
-        System.out.println(j1.getFichasDelJugador().toString());
+//        System.out.println(j1.getId());
+//        System.out.println(j1.getFichasDelJugador().toString());
+//        j1.getFichasDelJugador().clear();
+//        game.verificarGane();
+//        System.out.println(j1.getId());
+//        System.out.println(j1.getFichasDelJugador().toString());
 //        game.setOpcionDeJuegoDer(1);
 //        game.setOpcionDeJuegoIzq(1);
 //        game.jugadoresQuePuedenJugar();
@@ -51,16 +51,18 @@ public class Test {
 //        }else {
 //            System.out.println("no se puede");
 //        }
-        
-        System.out.println(game.toString());
-        
-        boolean gane = ctrl.hayGanador();
-        
-        if(gane){
-            System.out.println("Ya gano el jugador: " + game.getGanador());
-        }else{
-            System.out.println("aun no hay ganador!");
-        }
+//        ctrl.setSiguienteTurno();
+//        System.out.println(game.toString());
+//        ctrl.setSiguienteTurno();
+//        System.out.println(game.toString());
+//        
+//        boolean gane = ctrl.hayGanador();
+//        
+//        if(gane){
+//            System.out.println("Ya gano el jugador: " + game.getGanador());
+//        }else{
+//            System.out.println("aun no hay ganador!");
+//        }
         
         
         
