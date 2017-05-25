@@ -16,6 +16,7 @@ public class Juego implements Serializable {
     int opDeJuegoALaDer;
     ArrayList<Integer> jugadoresOk;
     int mano; //jugador que inicia la ronda.
+    int turno; //jugador que le toca jugar
     int ganador; //jugador que gana el juego
     ArrayList<Ficha> fichasJugadas;
     ArrayList<Ficha> fichasDelPozo;
@@ -30,6 +31,7 @@ public class Juego implements Serializable {
         this.jugadoresOk = new ArrayList<Integer>();
         this.initJugadoresDelJuego(cantJugadores);
         this.mano = -1;
+        this.turno = -1;
         this.ganador = 0;
     }
 
@@ -105,6 +107,14 @@ public class Juego implements Serializable {
         return ganador;
     }
 
+    public int getTurno() {
+        return turno;
+    }
+
+    public void setTurno(int turno) {
+        this.turno = turno;
+    }
+
 
     public ArrayList<Integer> jugadoresQuePuedenJugar(){
         ArrayList<Integer> idsJugadores = new ArrayList<Integer>();
@@ -138,6 +148,8 @@ public class Juego implements Serializable {
                     if(ficha.getEsDoble() == 1){
                         if(ficha.getNumDer() == mano){
                             this.mano = i+1;
+                            this.opDeJuegoALaIzq = ficha.getNumDer();
+                            this.opDeJuegoALaDer = ficha.getNumDer();
                             break outerLoop;
                         }
                     }
@@ -162,6 +174,8 @@ public class Juego implements Serializable {
                         if(ficha.getEsDoble() == 0){
                             if( (ficha.getNumIzq() == izq) && (ficha.getNumDer() == der) ){
                                 this.mano = i+1;
+                                this.opDeJuegoALaIzq = izq;
+                                this.opDeJuegoALaDer = der;
                                 break outerLoop;
                             }
                         }
@@ -183,7 +197,7 @@ public class Juego implements Serializable {
 
     @Override
     public String toString() {
-        return "Juego {" + "cantJugadores : " + cantJugadores + ", opDeJuegoALaIzq : " + opDeJuegoALaIzq + ", opDeJuegoALaDer : " + opDeJuegoALaDer + ", jugadoresOk : " + jugadoresOk.toString() + ", mano : " + mano + ", ganador : " + ganador + ", fichasJugadas : " + fichasJugadas.toString() + ", fichasDelPozo : " + fichasDelPozo.toString() + ", jugadores : " + jugadores.toString() + '}';
+        return "Juego {" + "cantJugadores : " + cantJugadores + ", opDeJuegoALaIzq : " + opDeJuegoALaIzq + ", opDeJuegoALaDer : " + opDeJuegoALaDer + ", jugadoresOk : " + jugadoresOk.toString() + ", mano : " + mano + ", turno : " + turno + ", ganador : " + ganador + ", fichasJugadas : " + fichasJugadas.toString() + ", fichasDelPozo : " + fichasDelPozo.toString() + ", jugadores : " + jugadores.toString() + '}';
     }
 
 

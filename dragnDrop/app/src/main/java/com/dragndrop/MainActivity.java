@@ -65,11 +65,11 @@ public class MainActivity extends Activity {
                     break;
                 case DragEvent.ACTION_DROP:
                     // Dropped, reassign View to ViewGroup
-                    View view = (View) event.getLocalState();
-                    ViewGroup owner = (ViewGroup) view.getParent();
-                    owner.removeView(view);
-                    LinearLayout container = (LinearLayout) v;
-                    container.addView(view);
+                    View view = (View) event.getLocalState(); //ficha que se esta moviendo
+                    ViewGroup owner = (ViewGroup) view.getParent(); //pila de fichas jugador
+                    owner.removeView(view); //borrando la ficha que se mueve
+                    LinearLayout container = (LinearLayout) v;  //elemento a donde se va a mover la ficha
+                    container.addView(view); //moviendo la ficha
                     view.setVisibility(View.VISIBLE);
                     break;
                 case DragEvent.ACTION_DRAG_ENDED:

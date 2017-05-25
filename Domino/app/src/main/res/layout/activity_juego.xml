@@ -19,6 +19,7 @@
         android:orientation="horizontal"
         android:id="@+id/LayoutDropZone"
         android:layout_marginTop="70dp"
+        android:gravity="center_horizontal"
         >
 
 
