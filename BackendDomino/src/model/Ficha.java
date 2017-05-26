@@ -12,10 +12,12 @@ public class Ficha implements Serializable{
     int numIzq;
     int numDer;
     int esDoble; // 1 si es doble o 0 si no lo es.
-
+    int orientacion; // 1 vertical o 2 horizontal
+    
     public Ficha(int numIzq, int numDer) {
         this.numIzq = numIzq;
         this.numDer = numDer;
+        this.orientacion = 1;
         if(numIzq == numDer){
             this.esDoble = 1;
         }else{
@@ -47,9 +49,19 @@ public class Ficha implements Serializable{
         this.esDoble = esDoble;
     }
 
+    public int getOrientacion() {
+        return orientacion;
+    }
+
+    public void setOrientacion(int orientacion) {
+        this.orientacion = orientacion;
+    }
+    
+    
+
     @Override
     public String toString() {
-        return "Ficha {" + "numIzq : " + numIzq + ", numDer : " + numDer + ", esDoble : " + esDoble + '}';
+        return "Ficha {" + "numIzq : " + numIzq + ", numDer : " + numDer + ", orientacion : " + orientacion + ", esDoble : " + esDoble + '}';
     }
     
     

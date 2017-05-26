@@ -121,7 +121,7 @@ public class ServerConnection extends Thread{
                     break; 
                     case 3 : {
                         System.out.println("Comiendo ficha: " + dataIncoming.getData());
-                        response.setTipo(2);
+                        response.setTipo(3);
                         if(this.server.ctrl.aplicarJugada(dataIncoming)){
                             response.setMensaje("Ficha comida!");
                             response.setError(0);
@@ -134,7 +134,7 @@ public class ServerConnection extends Thread{
                     }
                     break;
                     case 4 : {
-                        response.setTipo(5);
+                        response.setTipo(4);
                         response.setMensaje("Estado del Juego");
                         response.setError(0);
                         response.setData(this.server.gson.toJson(this.server.ctrl.juego));
@@ -149,8 +149,9 @@ public class ServerConnection extends Thread{
                         if(this.server.jugadoresConectados.size() == cantJugadores){ // el juego ya tiene todos lo jugadores
                             response.setData("-1"); //no puede unirse al juego
                         }else{
-                            this.server.jugadoresConectados.add(this.server.jugadoresConectados.size());
+                            this.server.jugadoresConectados.add(this.server.jugadoresConectados.size()+1);
                             response.setData(String.valueOf(this.server.jugadoresConectados.size()));
+                            System.out.println("Jugadores conectados: " + this.server.jugadoresConectados.toString());
                         }                        
                         this.sendDataToClient(this.server.gson.toJson(response));
                     }

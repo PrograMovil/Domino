@@ -38,6 +38,7 @@ public class Control {
     }
     
     private void initFichas(){
+        System.out.println("Inicializando fichas.");
         this.fichas = new ArrayList<Ficha>();
         for(int i=0; i < 7; i++){
             for(int j=0; j <= i; j++){
@@ -48,6 +49,7 @@ public class Control {
     }
     
     public void repartirFichas(int cantJugadores){
+        System.out.println("Repartiendo fichas.");
         ArrayList<ArrayList<Ficha>> setsDeFichas = new ArrayList<ArrayList<Ficha>>();
         
         //mezclar fichas
@@ -163,6 +165,7 @@ public class Control {
     }
     
     public void jugadoresHabilitados(){
+        System.out.println("Inicializando jugadores habilitados.");
         this.juego.setJugadoresOK();
     }
     
@@ -179,6 +182,7 @@ public class Control {
     }
     
     public void initTurno(){
+        System.out.println("Inicializando primer turno.");
         this.juego.setTurno(this.juego.getMano());
     }
     
