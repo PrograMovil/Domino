@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.domino.Model.Accion;
 import com.domino.Model.Ficha;
 import com.domino.Model.Juego;
+import com.domino.Model.Jugada;
 import com.domino.Model.Jugador;
 import com.google.gson.Gson;
 
@@ -54,7 +55,7 @@ public class JuegoActivity extends AppCompatActivity {
         }
 
 
-        new pedirJuegoTask(getApplicationContext()).execute();
+        new pedirJuegoInicialTask(getApplicationContext()).execute();
 
 
     }
@@ -315,13 +316,14 @@ public class JuegoActivity extends AppCompatActivity {
                     boolean rotar90=false, rotar180=false;
                     customTag t1=(customTag) view.getTag();
 
+
                     if(container.getTag().equals("izquierda")){
                         if(t1.numIzq==juego.getOpDeJuegoALaIzq()){
                             if(t1.iguales!=1)
-                                rotar90=true;
+                                rotar180=true;
                         } else if(t1.numDer==juego.getOpDeJuegoALaIzq()){
                             if(t1.iguales!=1)
-                                rotar180=true;
+                                rotar90=true;
                         }else{
                             Toast.makeText(getApplicationContext(), "No puede mover esta ficha aqui",Toast.LENGTH_LONG).show();
                             break;
@@ -329,10 +331,10 @@ public class JuegoActivity extends AppCompatActivity {
                     }else if(container.getTag().equals("derecha")){
                         if(t1.numIzq==juego.getOpDeJuegoALaDer()){
                             if(t1.iguales!=1)
-                                rotar180=true;
+                                rotar90=true;
                         } else if(t1.numDer==juego.getOpDeJuegoALaDer()){
                             if(t1.iguales!=1)
-                                rotar90=true;
+                                rotar180=true;
                         }else{
                             Toast.makeText(getApplicationContext(), "No puede mover esta ficha aqui",Toast.LENGTH_LONG).show();
                             break;
@@ -347,11 +349,20 @@ public class JuegoActivity extends AppCompatActivity {
                     Drawable clone = img.getDrawable().getConstantState().newDrawable(); //obtener una copia del drawable que se va a poner
                     container.setImageDrawable(clone); //moviendo la ficha
 
+
+                    Ficha f1=new Ficha(t1.numIzq,t1.numDer);
                     container.setOnDragListener(null);
-                    if(rotar90)
+                    if(rotar90){
                         container.setRotation(90);
-                    else if(rotar180)
+                        f1.setOrientacion(90);
+                    }
+                    else if(rotar180){
                         container.setRotation(180);
+                        f1.setOrientacion(180);
+                    }
+
+
+                    new ponerFichaTask(getApplicationContext(), f1).execute();
                     //view.setVisibility(View.VISIBLE);
                     break;
                 case DragEvent.ACTION_DRAG_ENDED:
@@ -363,12 +374,12 @@ public class JuegoActivity extends AppCompatActivity {
         }
     }
 
-    public class pedirJuegoTask extends AsyncTask<Void, Void, String> {
+    public class pedirJuegoInicialTask extends AsyncTask<Void, Void, String> {
 
         private Accion accion;
         Gson gson;
         private Context context;
-        pedirJuegoTask(Context context){
+        pedirJuegoInicialTask(Context context){
             this.context=context;
             accion=new Accion();
             gson=new Gson();
@@ -409,6 +420,10 @@ public class JuegoActivity extends AppCompatActivity {
                 layoutDropZone.addView(imageDropZone2);
             }
 
+            if(j.getTurno()!=idJugador){
+                new esperaDataIn(context).execute();
+            }
+
 
         }
 
@@ -433,6 +448,137 @@ public class JuegoActivity extends AppCompatActivity {
     }
 
 
+    public class esperaDataIn extends AsyncTask<Void, Void, String> {
+
+        private Accion accion;
+        Gson gson;
+        private Context context;
+        esperaDataIn(Context context){
+            this.context=context;
+            accion=new Accion();
+            gson=new Gson();
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Accion dataIncoming = gson.fromJson(result, Accion.class);
+            if(dataIncoming.getError()==0 && dataIncoming.getTipo()==2){
+                Juego j=gson.fromJson(dataIncoming.getData(), Juego.class);
+                juego=j;
+                Jugador jug=juego.getJugadores().get(idJugador-1);
+
+                LinearLayout layoutDropZone = (LinearLayout) findViewById(R.id.LayoutDropZone);
+                if(layoutDropZone.getChildCount() > 0)
+                    layoutDropZone.removeAllViews();
+
+                ImageView imageDropZone = new ImageView(context);
+                imageDropZone.setImageResource(R.drawable.dropzone);
+                imageDropZone.setTag("izquierda");
+                imageDropZone.setOnDragListener(new MyDragListener());
+                layoutDropZone.addView(imageDropZone);
+
+                if(j.getFichasJugadas().size()>0){
+                    for(Ficha f : j.getFichasJugadas()){
+                        ImageView fichaEnJuego = ponerImagenFicha(f);
+                        layoutDropZone.addView(fichaEnJuego);
+                    }
+                    ImageView imageDropZone2 = new ImageView(context);
+                    imageDropZone2.setImageResource(R.drawable.dropzone);
+                    imageDropZone2.setTag("derecha");
+                    imageDropZone2.setOnDragListener(new MyDragListener());
+                    layoutDropZone.addView(imageDropZone2);
+                }
+                if(j.getTurno()!=idJugador){
+                    new esperaDataIn(context).execute();
+                }
+
+            }
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                return dataIn.readUTF();
+            } catch (IOException ex) {
+                ex.getMessage();
+            }
+            return null;
+        }
+    }
+
+
+    public class ponerFichaTask extends AsyncTask<Void, Void, String> {
+
+        private Accion accion;
+        Gson gson;
+        private Ficha fichaMovida;
+        private Context context;
+
+        ponerFichaTask(Context context, Ficha fMov){
+            this.context=context;
+            accion=new Accion();
+            gson=new Gson();
+            fichaMovida=fMov;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Accion dataIncoming = gson.fromJson(result, Accion.class);
+            if(dataIncoming.getError()==0 && dataIncoming.getTipo()==2){
+                Juego j=gson.fromJson(dataIncoming.getData(), Juego.class);
+                juego=j;
+                Jugador jug=juego.getJugadores().get(idJugador-1);
+
+                LinearLayout layoutDropZone = (LinearLayout) findViewById(R.id.LayoutDropZone);
+                if(layoutDropZone.getChildCount() > 0)
+                    layoutDropZone.removeAllViews();
+                ImageView imageDropZone = new ImageView(context);
+                imageDropZone.setImageResource(R.drawable.dropzone);
+                imageDropZone.setTag("izquierda");
+                imageDropZone.setOnDragListener(new MyDragListener());
+                layoutDropZone.addView(imageDropZone);
+
+                if(j.getFichasJugadas().size()>0){
+                    for(Ficha f : j.getFichasJugadas()){
+                        ImageView fichaEnJuego = ponerImagenFicha(f);
+                        layoutDropZone.addView(fichaEnJuego);
+                    }
+                    ImageView imageDropZone2 = new ImageView(context);
+                    imageDropZone2.setImageResource(R.drawable.dropzone);
+                    imageDropZone2.setTag("derecha");
+                    imageDropZone2.setOnDragListener(new MyDragListener());
+                    layoutDropZone.addView(imageDropZone2);
+                }
+                if(j.getTurno()!=idJugador){
+                    new esperaDataIn(context).execute();
+                }
+
+            }
+
+        }
+
+
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                accion.setTipo(2);
+                accion.setMensaje("Ficha puesta");
+                accion.setError(0);
+                Jugada jugada=new Jugada(idJugador,fichaMovida);
+                accion.setData(this.gson.toJson(jugada));
+                dataOut.writeUTF(this.gson.toJson(accion));
+                dataOut.flush();
+                return dataIn.readUTF();
+            } catch (IOException ex) {
+                ex.getMessage();
+            }
+
+            return null;
+        }
+    }
+
+
 
     public class customTag{
         int numIzq, numDer, iguales;
@@ -443,3 +589,23 @@ public class JuegoActivity extends AppCompatActivity {
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

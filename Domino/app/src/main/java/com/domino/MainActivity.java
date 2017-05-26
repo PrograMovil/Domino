@@ -123,8 +123,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected String doInBackground(Void... params) {
             try {
-                Socket socket = null;
-                socket = new Socket("192.168.2.176",3333);
+                Socket socket = new Socket("192.168.2.176",3333);
                 dataOut=new DataOutputStream(socket.getOutputStream());
                 dataIn = new DataInputStream(socket.getInputStream());
 

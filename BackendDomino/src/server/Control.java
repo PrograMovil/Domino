@@ -111,7 +111,7 @@ public class Control {
             case 2 : {
                 System.out.println("Poniendo ficha : " + jugada.getFicha().toString());
                 
-                if( (this.juego.getFichasJugadas().add(ficha)) && (this.juego.getJugadores().get(idJugador - 1).getFichasDelJugador().remove(ficha)) ){
+                if( (this.juego.getFichasJugadas().add(ficha)) &&  borrarFicha(this.juego.getJugadores().get(idJugador - 1).getFichasDelJugador(), ficha) ){
                     this.jugadoresHabilitados();
                     this.setSiguienteTurno();
                     //cambiar las opciones de juego
@@ -192,5 +192,17 @@ public class Control {
         }else if(this.juego.getTurno() == this.juego.getCantJugadores()){
             this.juego.setTurno(1);
         }
+    }
+    
+    public boolean borrarFicha(ArrayList<Ficha> fichasJugador, Ficha fichaBorrar){
+        int i=0;
+        for(Ficha f : fichasJugador){
+            if(f.getNumDer()==fichaBorrar.getNumDer() && f.getNumIzq()==fichaBorrar.getNumIzq()){
+                return fichasJugador.remove(i)!=null;
+            }
+                
+            i++;
+        }
+        return false;
     }
 }

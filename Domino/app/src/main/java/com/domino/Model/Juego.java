@@ -24,6 +24,7 @@ public class Juego implements Serializable {
 
 
     public Juego(int cantJugadores) {
+        System.out.println("Creando Juego.");
         this.cantJugadores = cantJugadores;
         this.fichasJugadas = new ArrayList<Ficha>();
         this.fichasDelPozo = new ArrayList<Ficha>();
@@ -36,6 +37,7 @@ public class Juego implements Serializable {
     }
 
     private void initJugadoresDelJuego(int cantJugadores){
+        System.out.println("Inicializando jugadores");
         for(int i=1; i <= cantJugadores; i++){
             Jugador nuevo = new Jugador(i);
             this.jugadores.add(nuevo);
@@ -138,6 +140,7 @@ public class Juego implements Serializable {
     }
 
     public void setJugadorMano(){
+        System.out.println("Seteando jugador mano.");
         int mano = 6;
         ArrayList<Jugador> jugadores = this.jugadores;
         outerLoop :
