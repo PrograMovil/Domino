@@ -5,8 +5,10 @@
  */
 package testing;
 
+import com.google.gson.Gson;
 import java.util.Collections;
 import java.util.Random;
+import model.Accion;
 import model.Juego;
 import model.Jugada;
 import model.Jugador;
@@ -22,19 +24,24 @@ public class Test {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
+        Gson gson = new Gson();
         Control ctrl = new Control(2);
         Juego game = ctrl.getJuego();
-//        Jugador j1 = game.getJugadores().get(0);
+        Jugador j1 = game.getJugadores().get(0);
 //        Jugador j2 = game.getJugadores().get(1);
 //        Jugador j3 = game.getJugadores().get(2);
         
-//        Jugada ju1 = new Jugada(1,j1.getFichasDelJugador().get(0),1);
+        Jugada ju1 = new Jugada(1,game.getFichasDelPozo().get(0));
+        Accion ac1 = new Accion();
+        ac1.setTipo(3);
+        ac1.setData(gson.toJson(ju1));
+        
+        
 //        Jugada ju2 = new Jugada(2,game.getFichasDelPozo().get(0),2);
         
-//        ctrl.aplicarJugada(ju1);
+        ctrl.aplicarJugada(ac1);
 //        ctrl.aplicarJugada(ju2);
-//        System.out.println(game.toString());
+        System.out.println(game.toString());
 //        System.out.println(j1.getId());
 //        System.out.println(j1.getFichasDelJugador().toString());
 //        j1.getFichasDelJugador().clear();

@@ -130,7 +130,7 @@ public class ServerConnection extends Thread{
                             response.setError(1);
                         }                       
                         response.setData(this.server.gson.toJson(this.server.ctrl.juego));
-                        this.sendDataToClient(this.server.gson.toJson(response));
+                        this.sendDataToAllClients(this.server.gson.toJson(response));
                     }
                     break;
                     case 4 : {

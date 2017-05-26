@@ -132,7 +132,8 @@ public class Control {
             break;
             case 3 : {
                 System.out.println("Comiendo ficha : " + jugada.getFicha().toString());
-                if((this.juego.getFichasDelPozo().remove(ficha)) && (this.juego.getJugadores().get(idJugador - 1).getFichasDelJugador().add(ficha)) ){
+                if(borrarFicha(this.juego.getFichasDelPozo(),ficha) && (this.juego.getJugadores().get(idJugador - 1).getFichasDelJugador().add(ficha)) ){
+                    this.jugadoresHabilitados();
                     return true;
                 }
             }
