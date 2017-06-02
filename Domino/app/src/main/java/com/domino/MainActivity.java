@@ -68,12 +68,17 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Accion dataIncoming = gson.fromJson(result, Accion.class);
-            String idJ=gson.fromJson(dataIncoming.getData(), String.class);
-            Intent intent = new Intent(MainActivity.this, JuegoActivity.class);
-            intent.putExtra("idJugador", idJ);
-            MainActivity.this.startActivity(intent);
 
+            Accion dataIncoming = gson.fromJson(result, Accion.class);
+            if(dataIncoming.getError()==0) {
+                String idJ = gson.fromJson(dataIncoming.getData(), String.class);
+                Intent intent = new Intent(MainActivity.this, JuegoActivity.class);
+                intent.putExtra("idJugador", idJ);
+                MainActivity.this.startActivity(intent);
+            }
+            else{
+                new obtenerIdTask().execute();
+            }
 
         }
 
@@ -123,10 +128,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected String doInBackground(Void... params) {
             try {
-                Socket socket = new Socket("192.168.2.176",3333);
+                Socket socket = new Socket("192.168.43.160",3333);
                 dataOut=new DataOutputStream(socket.getOutputStream());
                 dataIn = new DataInputStream(socket.getInputStream());
-
+                System.out.println("Socket nuevo!!aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
                 accion.setTipo(0);
                 accion.setError(0);
                 dataOut.writeUTF(this.gson.toJson(accion));
