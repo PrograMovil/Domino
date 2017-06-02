@@ -73,6 +73,7 @@ public class ServerConnection extends Thread{
                     }
                     break;
                     case 0 : {
+                        System.out.println("CONSULTA HAY JUEGO INICIADO");
                         if(this.server.ctrl == null){
                             response.setTipo(0);
                             response.setMensaje("NO hay un juego iniciado");
@@ -89,17 +90,27 @@ public class ServerConnection extends Thread{
                     }
                     break;
                     case 1 : {
-                        Integer cantJugadores = this.server.gson.fromJson(dataIncoming.getData(), Integer.class);
-                        this.server.ctrl = new Control(cantJugadores);
+                        System.out.println("CONSULTA INICIALIZAR JUEGO");
                         response.setTipo(1);
-                        response.setMensaje("Juego iniciado, esperando jugadores...");
-                        response.setError(0);
-                        this.server.jugadoresConectados.add(this.server.ctrl.juego.getJugadores().get(0).getId());
-                        response.setData(this.server.gson.toJson(this.server.ctrl.juego.getJugadores().get(0).getId()));
-                        this.sendDataToClient(this.server.gson.toJson(response));
+                        if(this.server.ctrl == null){
+                            Integer cantJugadores = this.server.gson.fromJson(dataIncoming.getData(), Integer.class);
+                            this.server.ctrl = new Control(cantJugadores);
+                            
+                            response.setMensaje("Juego iniciado, esperando jugadores...");
+                            response.setError(0);
+                            this.server.jugadoresConectados.add(this.server.ctrl.juego.getJugadores().get(0).getId());
+                            response.setData(this.server.gson.toJson(this.server.ctrl.juego.getJugadores().get(0).getId()));
+                            
+                        }else{
+                            response.setMensaje("ERROR: ya existe un juego iniciado!");
+                            response.setError(1);
+                        }
+                        this.sendDataToClient(this.server.gson.toJson(response));                       
+                        
                     }
                     break;
                     case 2 : {
+                        System.out.println("CONSULTA PONER FICHA");
                         Jugada jugada = this.server.gson.fromJson(dataIncoming.getData(), Jugada.class);
                         System.out.println("Poniendo ficha de: " + jugada.toString());
                         response.setTipo(2);
@@ -134,6 +145,7 @@ public class ServerConnection extends Thread{
                     }
                     break;
                     case 4 : {
+                        System.out.println("CONSULTA ESTADO DEL JUEGO");
                         response.setTipo(4);
                         response.setMensaje("Estado del Juego");
                         response.setError(0);
@@ -142,6 +154,7 @@ public class ServerConnection extends Thread{
                     }
                     break;
                     case 5 : {
+                        System.out.println("CONSULTA ID DEL JUGADOR");
                         response.setTipo(5);
                         response.setMensaje("ID del jugador");
                         response.setError(0);
@@ -151,6 +164,7 @@ public class ServerConnection extends Thread{
                         }else{
                             this.server.jugadoresConectados.add(this.server.jugadoresConectados.size()+1);
                             response.setData(String.valueOf(this.server.jugadoresConectados.size()));
+                            System.out.println("");
                             System.out.println("Jugadores conectados: " + this.server.jugadoresConectados.toString());
                         }                        
                         this.sendDataToClient(this.server.gson.toJson(response));
