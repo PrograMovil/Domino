@@ -111,35 +111,86 @@ public class Control {
             case 2 : {
                 System.out.println("Poniendo ficha : " + jugada.getFicha().toString());
                 
-                if( (this.juego.getFichasJugadas().add(ficha)) &&  borrarFicha(this.juego.getJugadores().get(idJugador - 1).getFichasDelJugador(), ficha) ){
-                    this.jugadoresHabilitados();
-                    this.setSiguienteTurno();
-                    //cambiar las opciones de juego
-                    if(ficha.getNumIzq() == this.juego.getOpDeJuegoALaIzq()){
-                        this.setOpcionDeJuegoIzq(ficha.getNumDer());
-                    }else if(ficha.getNumDer() == this.juego.getOpDeJuegoALaIzq()){
-                        this.setOpcionDeJuegoIzq(ficha.getNumIzq());
-                    }else if(ficha.getNumIzq() == this.juego.getOpDeJuegoALaDer()){
-                        this.setOpcionDeJuegoDer(ficha.getNumDer());
-                    }else if(ficha.getNumDer() == this.juego.getOpDeJuegoALaDer()){
-                        this.setOpcionDeJuegoDer(ficha.getNumIzq());
+                if(ficha.getLadoJuego() == 'I'){ // poner al lado izquierdo del juego
+                    if( borrarFicha(this.juego.getJugadores().get(idJugador - 1).getFichasDelJugador(), ficha) ){
+                        try{
+                            this.juego.getFichasJugadas().add(0,ficha);
+                            this.jugadoresHabilitados();
+                            this.setSiguienteTurno();
+                            //cambiar las opciones de juego
+                            setearOpciones(ficha);
+                            //verificar gane
+                            this.juego.verificarGane();
+                            return true;
+                        }catch( IndexOutOfBoundsException e){
+                            System.out.println("No se pudo agregar ficha al array de fichas jugadas");
+                            return false;
+                        }
+                    }else{
+                        System.out.println("No se pudo borrar la ficha en el array fichas del jugador");
+                        return false;
                     }
-                    //verificar gane
-                    this.juego.verificarGane();
-                    return true;
-                }
+                }else if(ficha.getLadoJuego() == 'D'){// poner al lado derecho del juego
+                    if( borrarFicha(this.juego.getJugadores().get(idJugador - 1).getFichasDelJugador(), ficha) ){
+                        try{
+                            this.juego.getFichasJugadas().add(this.juego.getFichasJugadas().size(),ficha);  
+                            this.jugadoresHabilitados();
+                            this.setSiguienteTurno();
+                            //cambiar las opciones de juego
+                            setearOpciones(ficha);
+                            //verificar gane
+                            this.juego.verificarGane();
+                            return true;
+                        }catch( IndexOutOfBoundsException e){
+                            System.out.println("No se pudo agregar ficha al array");
+                            return false;
+                        }
+                    }else{
+                        System.out.println("No se pudo borrar la ficha en el array fichas del jugador");
+                        return false;
+                    }
+                }else if(ficha.getLadoJuego() == 'P'){//se esta poniendo la primer ficha del juego
+                    if( (this.juego.getFichasJugadas().add(ficha))
+                            && borrarFicha(this.juego.getJugadores().get(idJugador - 1).getFichasDelJugador(), ficha)){
+                        this.jugadoresHabilitados();
+                        this.setSiguienteTurno();
+                        //cambiar las opciones de juego
+                        setearOpciones(ficha);
+                        //verificar gane
+                        this.juego.verificarGane();
+                        return true;
+                    }else{
+                        System.out.println("Error al aplicar la jugada 'Poniendo'..");
+                        return false;
+                    }
+                }                
             }
             break;
             case 3 : {
                 System.out.println("Comiendo ficha : " + jugada.getFicha().toString());
                 if(borrarFicha(this.juego.getFichasDelPozo(),ficha) && (this.juego.getJugadores().get(idJugador - 1).getFichasDelJugador().add(ficha)) ){
                     this.jugadoresHabilitados();
+                    if(this.juego.getFichasDelPozo().isEmpty()){
+                        this.setSiguienteTurno();
+                    }
                     return true;
                 }
             }
             break;
         }
         return false;
+    }
+    
+    private void setearOpciones(Ficha ficha){
+        if(ficha.getNumIzq() == this.juego.getOpDeJuegoALaIzq()){
+            this.setOpcionDeJuegoIzq(ficha.getNumDer());
+        }else if(ficha.getNumDer() == this.juego.getOpDeJuegoALaIzq()){
+            this.setOpcionDeJuegoIzq(ficha.getNumIzq());
+        }else if(ficha.getNumIzq() == this.juego.getOpDeJuegoALaDer()){
+            this.setOpcionDeJuegoDer(ficha.getNumDer());
+        }else if(ficha.getNumDer() == this.juego.getOpDeJuegoALaDer()){
+            this.setOpcionDeJuegoDer(ficha.getNumIzq());
+        }
     }
     
     public void setOpcionesDeJuego(int izq, int der){

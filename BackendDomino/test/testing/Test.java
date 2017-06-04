@@ -6,6 +6,7 @@
 package testing;
 
 import com.google.gson.Gson;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 import model.Accion;
@@ -24,24 +25,24 @@ public class Test {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Gson gson = new Gson();
-        Control ctrl = new Control(2);
-        Juego game = ctrl.getJuego();
-        Jugador j1 = game.getJugadores().get(0);
+//        Gson gson = new Gson();
+//        Control ctrl = new Control(2);
+//        Juego game = ctrl.getJuego();
+//        Jugador j1 = game.getJugadores().get(0);
 //        Jugador j2 = game.getJugadores().get(1);
 //        Jugador j3 = game.getJugadores().get(2);
         
-        Jugada ju1 = new Jugada(1,game.getFichasDelPozo().get(0));
-        Accion ac1 = new Accion();
-        ac1.setTipo(3);
-        ac1.setData(gson.toJson(ju1));
+//        Jugada ju1 = new Jugada(1,game.getFichasDelPozo().get(0));
+//        Accion ac1 = new Accion();
+//        ac1.setTipo(3);
+//        ac1.setData(gson.toJson(ju1));
         
         
 //        Jugada ju2 = new Jugada(2,game.getFichasDelPozo().get(0),2);
         
-        ctrl.aplicarJugada(ac1);
+//        ctrl.aplicarJugada(ac1);
 //        ctrl.aplicarJugada(ju2);
-        System.out.println(game.toString());
+//        System.out.println(game.toString());
 //        System.out.println(j1.getId());
 //        System.out.println(j1.getFichasDelJugador().toString());
 //        j1.getFichasDelJugador().clear();
@@ -72,7 +73,22 @@ public class Test {
 //        }
         
         
+        ArrayList<Integer> lista = new ArrayList<Integer>();
         
+        lista.add(1);
+        lista.add(2);
+        lista.add(3);
+        lista.add(4);
+        lista.add(5);
+        
+        System.out.println(lista.toString());
+        
+        lista.add(0, 6);
+        lista.add(lista.size(), 7);
+        lista.add(0, 8);
+        lista.add(lista.size(), 9);
+        
+        System.out.println(lista.toString());
         
     }
     
