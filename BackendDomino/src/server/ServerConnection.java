@@ -128,6 +128,11 @@ public class ServerConnection extends Thread{
                             response.setMensaje("ERROR: jugada no valida!");
                             response.setError(1);
                         }
+                        System.out.println("Nuevas opciones de Juego: izp = " 
+                                + this.server.ctrl.juego.getOpDeJuegoALaIzq() 
+                                +  " der = " + this.server.ctrl.juego.getOpDeJuegoALaDer());
+                        System.out.println("Jugadores ok: "+ this.server.ctrl.juego.getJugadoresOk().toString());
+                        System.out.println("Siguiente turno: "+this.server.ctrl.juego.getTurno());
                         response.setData(this.server.gson.toJson(this.server.ctrl.juego));
                         this.sendDataToAllClients(this.server.gson.toJson(response));                        
                     }
@@ -149,6 +154,11 @@ public class ServerConnection extends Thread{
                             response.setMensaje("ERROR: jugada no valida!");
                             response.setError(1);
                         }
+                        System.out.println("Nuevas opciones de Juego: izp = " 
+                                + this.server.ctrl.juego.getOpDeJuegoALaIzq() 
+                                +  " der = " + this.server.ctrl.juego.getOpDeJuegoALaDer());
+                        System.out.println("Jugadores ok: "+ this.server.ctrl.juego.getJugadoresOk().toString());
+                        System.out.println("Siguiente turno: "+this.server.ctrl.juego.getTurno());
                         response.setData(this.server.gson.toJson(this.server.ctrl.juego));
                         this.sendDataToClient(this.server.gson.toJson(response));
                     }
