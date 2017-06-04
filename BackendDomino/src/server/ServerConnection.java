@@ -142,7 +142,7 @@ public class ServerConnection extends Thread{
                         Jugada jugada = this.server.gson.fromJson(dataIncoming.getData(), Jugada.class);
                         System.out.println("Comiendo ficha: " + dataIncoming.getData());
                         response.setTipo(3);
-                        if(this.server.ctrl.validarJugadaPoniendo(jugada)){
+//                        if(this.server.ctrl.validarJugadaPoniendo(jugada)){
                             if(this.server.ctrl.aplicarJugada(dataIncoming)){
                                 response.setMensaje("Ficha comida!");
                                 response.setError(0);
@@ -150,10 +150,10 @@ public class ServerConnection extends Thread{
                                 response.setMensaje("ERROR: No se pudo comer la ficha!");
                                 response.setError(1);
                             }                       
-                        }else{
-                            response.setMensaje("ERROR: jugada no valida!");
-                            response.setError(1);
-                        }
+//                        }else{
+//                            response.setMensaje("ERROR: jugada no valida!");
+//                            response.setError(1);
+//                        }
                         System.out.println("Nuevas opciones de Juego: izp = " 
                                 + this.server.ctrl.juego.getOpDeJuegoALaIzq() 
                                 +  " der = " + this.server.ctrl.juego.getOpDeJuegoALaDer());

@@ -209,15 +209,21 @@ public class Control {
         int opIzq = this.juego.getOpDeJuegoALaIzq();
         int opDer = this.juego.getOpDeJuegoALaDer();
         Ficha ficha = jugada.getFicha();
-        if( (ficha.getNumIzq() == opIzq) || (ficha.getNumIzq() == opDer) || (ficha.getNumDer() == opIzq) || (ficha.getNumDer() == opDer)){
-            return true;
-        }else{
-            return false;
+        if(ficha.getLadoJuego() == 'I'){
+            if((ficha.getNumIzq() == opIzq) || (ficha.getNumDer() == opIzq)){
+                return true;
+            }
+        }else if(ficha.getLadoJuego() == 'D'){
+            if((ficha.getNumIzq() == opDer) || (ficha.getNumDer() == opDer)){
+                return true;
+            }
         }
+        return false;        
     }
     
     public void jugadoresHabilitados(){
         System.out.println("Inicializando jugadores habilitados.");
+        this.juego.getJugadoresOk().clear();
         this.juego.setJugadoresOK();
     }
     
