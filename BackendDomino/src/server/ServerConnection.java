@@ -93,6 +93,7 @@ public class ServerConnection extends Thread{
                         System.out.println("CONSULTA INICIALIZAR JUEGO");
                         response.setTipo(1);
                         if(this.server.ctrl == null){
+                            System.out.println("Iniciando juego nuevo");
                             Integer cantJugadores = this.server.gson.fromJson(dataIncoming.getData(), Integer.class);
                             this.server.ctrl = new Control(cantJugadores);
                             
@@ -102,6 +103,7 @@ public class ServerConnection extends Thread{
                             response.setData(this.server.gson.toJson(this.server.ctrl.juego.getJugadores().get(0).getId()));
                             
                         }else{
+                            System.out.println("Error al iniciar juego");
                             response.setMensaje("ERROR: ya existe un juego iniciado!");
                             response.setError(1);
                         }
@@ -141,7 +143,7 @@ public class ServerConnection extends Thread{
                             response.setError(1);
                         }                       
                         response.setData(this.server.gson.toJson(this.server.ctrl.juego));
-                        this.sendDataToAllClients(this.server.gson.toJson(response));
+                        this.sendDataToClient(this.server.gson.toJson(response));
                     }
                     break;
                     case 4 : {
@@ -150,7 +152,7 @@ public class ServerConnection extends Thread{
                         response.setMensaje("Estado del Juego");
                         response.setError(0);
                         response.setData(this.server.gson.toJson(this.server.ctrl.juego));
-                        this.sendDataToAllClients(this.server.gson.toJson(response));
+                        this.sendDataToClient(this.server.gson.toJson(response));
                     }
                     break;
                     case 5 : {

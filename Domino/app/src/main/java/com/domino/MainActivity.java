@@ -68,17 +68,15 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-
-            Accion dataIncoming = gson.fromJson(result, Accion.class);
-            if(dataIncoming.getError()==0) {
-                String idJ = gson.fromJson(dataIncoming.getData(), String.class);
-                Intent intent = new Intent(MainActivity.this, JuegoActivity.class);
-                intent.putExtra("idJugador", idJ);
-                MainActivity.this.startActivity(intent);
-            }
-            else{
-                new obtenerIdTask().execute();
-            }
+                Accion dataIncoming = gson.fromJson(result, Accion.class);
+                if (dataIncoming.getError() == 0) {
+                    String idJ = gson.fromJson(dataIncoming.getData(), String.class);
+                    Intent intent = new Intent(MainActivity.this, JuegoActivity.class);
+                    intent.putExtra("idJugador", idJ);
+                    MainActivity.this.startActivity(intent);
+                } else {
+                    new obtenerIdTask().execute();
+                }
 
         }
 
@@ -87,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             try {
 
                 accion.setTipo(1);
-                accion.setMensaje("Juego iniciado!");
+                accion.setMensaje("Iniciar nuevo Juego o unirse?");
                 accion.setData(this.gson.toJson(cantJugadores));
                 accion.setError(0);
                 dataOut.writeUTF(this.gson.toJson(accion));
@@ -113,12 +111,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(String result) {
-                Accion dataIncoming = gson.fromJson(result, Accion.class);
-                String data=gson.fromJson(dataIncoming.getData(), String.class);
+                    Accion dataIncoming = gson.fromJson(result, Accion.class);
+                    String data=gson.fromJson(dataIncoming.getData(), String.class);
 
-                if(data.equals("1")){ //Hay un juego en curso por lo que lo envia al juego activity
-                    new obtenerIdTask().execute();
-                }
+                    if(data.equals("1")){ //Hay un juego en curso por lo que lo envia al juego activity
+                        new obtenerIdTask().execute();
+                    }
 
 
 
@@ -128,10 +126,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected String doInBackground(Void... params) {
             try {
-                Socket socket = new Socket("192.168.43.160",3333);
-                dataOut=new DataOutputStream(socket.getOutputStream());
-                dataIn = new DataInputStream(socket.getInputStream());
-                System.out.println("Socket nuevo!!aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                socket socket= com.domino.socket.getInstancia();
+                dataOut=new DataOutputStream(socket.getSocket().getOutputStream());
+                dataIn = new DataInputStream(socket.getSocket().getInputStream());
                 accion.setTipo(0);
                 accion.setError(0);
                 dataOut.writeUTF(this.gson.toJson(accion));
