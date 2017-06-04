@@ -345,8 +345,10 @@ public class JuegoActivity extends AppCompatActivity {
                     boolean rotar90=false, rotar270=false;
                     customTag t1=(customTag) view.getTag();
 
+                    Ficha f1=new Ficha(t1.numIzq,t1.numDer);
 
                     if(container.getTag().equals("izquierda")){
+                        f1.setLadoJuego('I');
                         if(t1.numIzq==juego.getOpDeJuegoALaIzq()){
                             if(t1.iguales!=1)
                                 rotar270=true;
@@ -358,6 +360,7 @@ public class JuegoActivity extends AppCompatActivity {
                             break;
                         }
                     }else if(container.getTag().equals("derecha")){
+                        f1.setLadoJuego('D');
                         if(t1.numIzq==juego.getOpDeJuegoALaDer()){
                             if(t1.iguales!=1)
                                 rotar90=true;
@@ -379,7 +382,7 @@ public class JuegoActivity extends AppCompatActivity {
                     container.setImageDrawable(clone); //moviendo la ficha
 
 
-                    Ficha f1=new Ficha(t1.numIzq,t1.numDer);
+
                     container.setOnDragListener(null);
                     if(rotar90){
                         container.setRotation(90);
@@ -389,6 +392,8 @@ public class JuegoActivity extends AppCompatActivity {
                         container.setRotation(270);
                         f1.setOrientacion(270);
                     }
+
+
 
 
                     new ponerFichaTask(getApplicationContext(), f1).execute();

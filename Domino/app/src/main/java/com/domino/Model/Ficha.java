@@ -12,12 +12,14 @@ public class Ficha implements Serializable{
     int numIzq;
     int numDer;
     int esDoble; // 1 si es doble o 0 si no lo es.
-    int orientacion; // 1 vertical o 2 horizontal
+    int orientacion; // 90 o 180
+    char ladoJuego; // 'I' para a la izquierda, 'D' para a la derecha, 'P' para primera ficha puesta
 
     public Ficha(int numIzq, int numDer) {
         this.numIzq = numIzq;
         this.numDer = numDer;
         this.orientacion = 1;
+        this.ladoJuego = 'P';
         if(numIzq == numDer){
             this.esDoble = 1;
         }else{
@@ -57,11 +59,19 @@ public class Ficha implements Serializable{
         this.orientacion = orientacion;
     }
 
+    public char getLadoJuego() {
+        return ladoJuego;
+    }
+
+    public void setLadoJuego(char ladoJuego) {
+        this.ladoJuego = ladoJuego;
+    }
+
 
 
     @Override
     public String toString() {
-        return "Ficha {" + "numIzq : " + numIzq + ", numDer : " + numDer + ", orientacion : " + orientacion + ", esDoble : " + esDoble + '}';
+        return "Ficha {" + "numIzq : " + numIzq + ", numDer : " + numDer + ", orientacion : " + orientacion +", ladoJuego : " + ladoJuego + ", esDoble : " + esDoble + '}';
     }
 
 

@@ -131,8 +131,8 @@ public class Juego implements Serializable {
     private boolean puedeJugar(ArrayList<Ficha> fichasJugador){
         boolean puede = false;
         for(Ficha ficha : fichasJugador){
-            if( (ficha.getNumDer() == this.opDeJuegoALaDer) || (ficha.getNumDer() == this.opDeJuegoALaIzq) ||
-                    (ficha.getNumIzq() == this.opDeJuegoALaDer) || (ficha.getNumIzq() == this.opDeJuegoALaIzq)){
+            if( (ficha.getNumDer() == this.getOpDeJuegoALaDer()) || (ficha.getNumDer() == this.getOpDeJuegoALaIzq()) ||
+                    (ficha.getNumIzq() == this.getOpDeJuegoALaDer()) || (ficha.getNumIzq() == this.getOpDeJuegoALaIzq())){
                 puede = true;
             }
         }
