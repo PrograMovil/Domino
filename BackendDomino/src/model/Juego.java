@@ -98,6 +98,7 @@ public class Juego implements Serializable {
     }
     
     public void setJugadoresOK(){
+        this.jugadoresOk.clear();
         this.jugadoresOk = this.jugadoresQuePuedenJugar();
     }
 

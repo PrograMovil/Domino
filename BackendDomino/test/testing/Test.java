@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 import model.Accion;
+import model.Ficha;
 import model.Juego;
 import model.Jugada;
 import model.Jugador;
@@ -25,71 +26,53 @@ public class Test {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-//        Gson gson = new Gson();
-//        Control ctrl = new Control(2);
-//        Juego game = ctrl.getJuego();
-//        Jugador j1 = game.getJugadores().get(0);
-//        Jugador j2 = game.getJugadores().get(1);
-//        Jugador j3 = game.getJugadores().get(2);
+        Gson gson = new Gson();
+        Control ctrl = new Control(2);
+        Juego game = ctrl.getJuego();
+        Jugador j1 = game.getJugadores().get(0);
+        Jugador j2 = game.getJugadores().get(1);
+        j1.getFichasDelJugador().clear();
+        j2.getFichasDelJugador().clear();
+        System.out.println("Cant fichas J1:"+j1.getFichasDelJugador().size());
+        System.out.println("Cant fichas J2:"+j2.getFichasDelJugador().size());
         
-//        Jugada ju1 = new Jugada(1,game.getFichasDelPozo().get(0));
-//        Accion ac1 = new Accion();
-//        ac1.setTipo(3);
-//        ac1.setData(gson.toJson(ju1));
+        j1.getFichasDelJugador().add(new Ficha(2,0));
+        j1.getFichasDelJugador().add(new Ficha(2,2));        
+        j2.getFichasDelJugador().add(new Ficha(2,3));
+        j2.getFichasDelJugador().add(new Ficha(3,3));
         
+        game.setOpcionDeJuegoIzq(0);     
+        game.setOpcionDeJuegoDer(0);
         
-//        Jugada ju2 = new Jugada(2,game.getFichasDelPozo().get(0),2);
+        game.setJugadoresOK();
         
-//        ctrl.aplicarJugada(ac1);
-//        ctrl.aplicarJugada(ju2);
-//        System.out.println(game.toString());
-//        System.out.println(j1.getId());
-//        System.out.println(j1.getFichasDelJugador().toString());
-//        j1.getFichasDelJugador().clear();
-//        game.verificarGane();
-//        System.out.println(j1.getId());
-//        System.out.println(j1.getFichasDelJugador().toString());
-//        game.setOpcionDeJuegoDer(1);
-//        game.setOpcionDeJuegoIzq(1);
-//        game.jugadoresQuePuedenJugar();
-//        game.setJugadoresOK();
-//        boolean isOK = ctrl.validarJugadaPoniendo(ju1);
-//        if(isOK){
-//            System.out.println("todo bien");
-//        }else {
-//            System.out.println("no se puede");
-//        }
-//        ctrl.setSiguienteTurno();
-//        System.out.println(game.toString());
-//        ctrl.setSiguienteTurno();
-//        System.out.println(game.toString());
-//        
-//        boolean gane = ctrl.hayGanador();
-//        
-//        if(gane){
-//            System.out.println("Ya gano el jugador: " + game.getGanador());
-//        }else{
-//            System.out.println("aun no hay ganador!");
-//        }
+        System.out.println("Opciones de juego: izq = "+game.getOpDeJuegoALaIzq()+" der = "+ game.getOpDeJuegoALaDer());
+        System.out.println("Jugadores OK: " + game.getJugadoresOk().toString());
         
+        j1.getFichasDelJugador().get(0).setLadoJuego('D');
+        Jugada ju1 = new Jugada(1,j1.getFichasDelJugador().get(0));
+        Accion acc1 = new Accion();
+        acc1.setTipo(2);
+        acc1.setData(gson.toJson(ju1));
+        ctrl.aplicarJugada(acc1);
+        System.out.println("Cant fichas J1:"+j1.getFichasDelJugador().size());
+        System.out.println("Cant fichas J2:"+j2.getFichasDelJugador().size());
+        System.out.println("Opciones de juego: izq = "+game.getOpDeJuegoALaIzq()+" der = "+ game.getOpDeJuegoALaDer());
+        System.out.println("Jugadores OK: " + game.getJugadoresOk().toString());
+        System.out.println("Fichas jugadas: " + game.getFichasJugadas().toString());
         
-        ArrayList<Integer> lista = new ArrayList<Integer>();
-        
-        lista.add(1);
-        lista.add(2);
-        lista.add(3);
-        lista.add(4);
-        lista.add(5);
-        
-        System.out.println(lista.toString());
-        
-        lista.add(0, 6);
-        lista.add(lista.size(), 7);
-        lista.add(0, 8);
-        lista.add(lista.size(), 9);
-        
-        System.out.println(lista.toString());
-        
+
+        j2.getFichasDelJugador().get(0).setLadoJuego('D');
+        Jugada ju2 = new Jugada(2,j2.getFichasDelJugador().get(0));
+        Accion acc2 = new Accion();
+        acc2.setTipo(2);
+        acc2.setData(gson.toJson(ju2));
+        ctrl.aplicarJugada(acc2);
+        System.out.println("Cant fichas J1:"+j1.getFichasDelJugador().size());
+        System.out.println("Cant fichas J2:"+j2.getFichasDelJugador().size());
+        System.out.println("Opciones de juego: izq = "+game.getOpDeJuegoALaIzq()+" der = "+ game.getOpDeJuegoALaDer());
+        System.out.println("Jugadores OK: " + game.getJugadoresOk().toString());
+        System.out.println("Fichas jugadas: " + game.getFichasJugadas().toString());
     }
     
 }

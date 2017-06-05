@@ -33,8 +33,8 @@ public class Control {
         this.repartirFichas(cantJugadores);
         this.juego.setJugadorMano();
         this.initTurno();
-        this.jugadoresHabilitados();
-        System.out.println(this.juego.toString());
+//        this.jugadoresHabilitados();
+//        System.out.println(this.juego.toString());
     }
     
     private void initFichas(){
@@ -115,10 +115,10 @@ public class Control {
                     if( borrarFicha(this.juego.getJugadores().get(idJugador - 1).getFichasDelJugador(), ficha) ){
                         try{
                             this.juego.getFichasJugadas().add(0,ficha);
-                            this.jugadoresHabilitados();
-                            this.setSiguienteTurno();
                             //cambiar las opciones de juego
-                            setearOpciones(ficha);
+                            setearOpcionesIzquierda(ficha);
+                            this.jugadoresHabilitados();
+                            this.setSiguienteTurno();                            
                             //verificar gane
                             this.juego.verificarGane();
                             return true;
@@ -133,11 +133,11 @@ public class Control {
                 }else if(ficha.getLadoJuego() == 'D'){// poner al lado derecho del juego
                     if( borrarFicha(this.juego.getJugadores().get(idJugador - 1).getFichasDelJugador(), ficha) ){
                         try{
-                            this.juego.getFichasJugadas().add(this.juego.getFichasJugadas().size(),ficha);  
+                            this.juego.getFichasJugadas().add(this.juego.getFichasJugadas().size(),ficha); 
+                            //cambiar las opciones de juego
+                            setearOpcionesDerecha(ficha);
                             this.jugadoresHabilitados();
                             this.setSiguienteTurno();
-                            //cambiar las opciones de juego
-                            setearOpciones(ficha);
                             //verificar gane
                             this.juego.verificarGane();
                             return true;
@@ -154,10 +154,6 @@ public class Control {
                             && borrarFicha(this.juego.getJugadores().get(idJugador - 1).getFichasDelJugador(), ficha)){
                         this.jugadoresHabilitados();
                         this.setSiguienteTurno();
-                        //cambiar las opciones de juego
-                        setearOpciones(ficha);
-                        //verificar gane
-                        this.juego.verificarGane();
                         return true;
                     }else{
                         System.out.println("Error al aplicar la jugada 'Poniendo'..");
@@ -181,18 +177,22 @@ public class Control {
         return false;
     }
     
-    private void setearOpciones(Ficha ficha){
-        if(ficha.getNumIzq() == this.juego.getOpDeJuegoALaIzq()){
-            this.setOpcionDeJuegoIzq(ficha.getNumDer());
-        }else if(ficha.getNumDer() == this.juego.getOpDeJuegoALaIzq()){
-            this.setOpcionDeJuegoIzq(ficha.getNumIzq());
-        }else if(ficha.getNumIzq() == this.juego.getOpDeJuegoALaDer()){
-            this.setOpcionDeJuegoDer(ficha.getNumDer());
-        }else if(ficha.getNumDer() == this.juego.getOpDeJuegoALaDer()){
-            this.setOpcionDeJuegoDer(ficha.getNumIzq());
+    private void setearOpcionesDerecha(Ficha ficha){
+        if(this.juego.getOpDeJuegoALaDer() == ficha.getNumIzq()){
+            this.juego.setOpcionDeJuegoDer(ficha.getNumDer());
+        }else if(this.juego.getOpDeJuegoALaDer() == ficha.getNumDer()){
+            this.juego.setOpcionDeJuegoDer(ficha.getNumIzq());
         }
     }
     
+    private void setearOpcionesIzquierda(Ficha ficha){
+        if(this.juego.getOpDeJuegoALaIzq() == ficha.getNumDer()){
+            this.juego.setOpcionDeJuegoIzq(ficha.getNumIzq());
+        }else if(this.juego.getOpDeJuegoALaIzq() == ficha.getNumIzq()){
+            this.juego.setOpcionDeJuegoIzq(ficha.getNumDer());
+        }
+    }
+        
     public void setOpcionesDeJuego(int izq, int der){
         this.juego.setOpcionesDeJuego(izq, der);
     }
