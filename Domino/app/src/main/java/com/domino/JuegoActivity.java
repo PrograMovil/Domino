@@ -657,7 +657,7 @@ public class JuegoActivity extends AppCompatActivity {
                             ImageView fichaEnJuego = ponerImagenFicha(f);
                             //fichaEnJuego.setBackgroundResource(R.drawable.dropped);
                             fichaEnJuego.setRotation(f.getOrientacion());
-                            fichaEnJuego.setPadding(0,0,20,0);
+                            fichaEnJuego.setPadding(0,0,0,0);
                             layoutDropZone.addView(fichaEnJuego);
                         }
                         ImageView imageDropZone2 = new ImageView(context);
