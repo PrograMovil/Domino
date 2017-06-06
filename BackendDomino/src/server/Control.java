@@ -33,8 +33,8 @@ public class Control {
         this.repartirFichas(cantJugadores);
         this.juego.setJugadorMano();
         this.initTurno();
-//        this.jugadoresHabilitados();
-//        System.out.println(this.juego.toString());
+        this.jugadoresHabilitados();
+        System.out.println(this.juego.toString());
     }
     
     private void initFichas(){

@@ -32,11 +32,11 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class JuegoActivity extends AppCompatActivity {
-    TextView texto;
     TextView idTurno;
     ImageButton tomarDePozo;
     int idJugador;
     Juego juego;
+    boolean primerTurno;
     private static DataOutputStream dataOut;
     private static DataInputStream dataIn;
 
@@ -46,10 +46,10 @@ public class JuegoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_juego);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        primerTurno=false;
 
         dataIn=MainActivity.getDataIn();
         dataOut=MainActivity.getDataOut();
-        texto=(TextView) findViewById(R.id.textView2);
         idTurno=(TextView) findViewById(R.id.turno);
         tomarDePozo=(ImageButton) findViewById(R.id.agregarFicha);
         tomarDePozo.setVisibility(View.INVISIBLE);
@@ -57,8 +57,8 @@ public class JuegoActivity extends AppCompatActivity {
         if(bundle.getString("idJugador")!= null)
         {
             idJugador=Integer.parseInt(bundle.getString("idJugador"));
-            texto.setText("iD del jugador: "+idJugador);
         }
+        setTitle("Jugador #"+idJugador);
 
         tomarDePozo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -349,16 +349,24 @@ public class JuegoActivity extends AppCompatActivity {
 
                     if(container.getTag().equals("izquierda")){
                         f1.setLadoJuego('I');
-                        if(t1.numIzq==juego.getOpDeJuegoALaIzq()){
-                            if(t1.iguales!=1)
-                                rotar270=true;
-                        } else if(t1.numDer==juego.getOpDeJuegoALaIzq()){
-                            if(t1.iguales!=1)
-                                rotar90=true;
-                        }else{
-                            Toast.makeText(getApplicationContext(), "No puede mover esta ficha aqui",Toast.LENGTH_LONG).show();
-                            break;
-                        }
+                        if(primerTurno==false && juego.getMano()==idJugador){
+                            if(t1.numIzq==juego.getOpDeJuegoALaIzq() && t1.numDer==juego.getOpDeJuegoALaIzq()){
+                                primerTurno=true;
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(), "Debe mover la ficha mayor",Toast.LENGTH_LONG).show();
+                                break;
+                            }
+                        }else if(t1.numIzq==juego.getOpDeJuegoALaIzq()){
+                                if(t1.iguales!=1)
+                                    rotar270=true;
+                            } else if(t1.numDer==juego.getOpDeJuegoALaIzq()){
+                                if(t1.iguales!=1)
+                                    rotar90=true;
+                            }else{
+                                Toast.makeText(getApplicationContext(), "No puede mover esta ficha aqui",Toast.LENGTH_LONG).show();
+                                break;
+                            }
                     }else if(container.getTag().equals("derecha")){
                         f1.setLadoJuego('D');
                         if(t1.numIzq==juego.getOpDeJuegoALaDer()){
@@ -380,7 +388,7 @@ public class JuegoActivity extends AppCompatActivity {
                     ImageView img=(ImageView)view;
                     Drawable clone = img.getDrawable().getConstantState().newDrawable(); //obtener una copia del drawable que se va a poner
                     container.setImageDrawable(clone); //moviendo la ficha
-
+                    container.setPadding(0,0,20,0);
 
 
                     container.setOnDragListener(null);
@@ -397,7 +405,6 @@ public class JuegoActivity extends AppCompatActivity {
 
 
                     new ponerFichaTask(getApplicationContext(), f1).execute();
-                    //view.setVisibility(View.VISIBLE);
                     break;
                 case DragEvent.ACTION_DRAG_ENDED:
                     //v.setBackgroundDrawable(normalShape);
@@ -443,6 +450,7 @@ public class JuegoActivity extends AppCompatActivity {
                 ImageView image = ponerImagenFicha(jug.getFichasDelJugador().get(i));
                 image.setTag(new customTag(jug.getFichasDelJugador().get(i).getNumIzq(),jug.getFichasDelJugador().get(i).getNumDer(),jug.getFichasDelJugador().get(i).getEsDoble()));
                 image.setOnTouchListener(new MyTouchListener());
+
                 layoutFichasJugador.addView(image);
             }
 
@@ -455,6 +463,8 @@ public class JuegoActivity extends AppCompatActivity {
             if(j.getFichasJugadas().size()>0){
                 for(Ficha f : j.getFichasJugadas()){
                     ImageView fichaEnJuego = ponerImagenFicha(f);
+                    //fichaEnJuego.setBackgroundResource(R.drawable.dropped);
+                    fichaEnJuego.setPadding(0,0,20,0);
                     fichaEnJuego.setRotation(f.getOrientacion());
                     layoutDropZone.addView(fichaEnJuego);
                 }
@@ -522,6 +532,17 @@ public class JuegoActivity extends AppCompatActivity {
                     idTurno.setText(Integer.toString(juego.getTurno()));
                     Jugador jug=juego.getJugadores().get(idJugador-1);
 
+                    if(j.getGanador()!=0){
+                        if(j.getGanador()==idJugador){
+                            Intent intent = new Intent(JuegoActivity.this, Ganador.class);
+                            JuegoActivity.this.startActivity(intent);
+                        }
+                        else{
+                            Intent intent = new Intent(JuegoActivity.this, perdedor.class);
+                            JuegoActivity.this.startActivity(intent);
+                        }
+                    }
+
                     if(juego.getTurno()==idJugador){ //verificar si le toca jugar
                         if(juego.getJugadoresOk().contains(idJugador)) //verificar si tiene fichas para jugar
                             tomarDePozo.setVisibility(View.INVISIBLE);
@@ -541,6 +562,8 @@ public class JuegoActivity extends AppCompatActivity {
                     if(j.getFichasJugadas().size()>0){
                         for(Ficha f : j.getFichasJugadas()){
                             ImageView fichaEnJuego = ponerImagenFicha(f);
+                            //fichaEnJuego.setBackgroundResource(R.drawable.dropped);
+                            fichaEnJuego.setPadding(0,0,20,0);
                             fichaEnJuego.setRotation(f.getOrientacion());
                             layoutDropZone.addView(fichaEnJuego);
                         }
@@ -602,6 +625,17 @@ public class JuegoActivity extends AppCompatActivity {
                     idTurno.setText(Integer.toString(juego.getTurno()));
                     Jugador jug = juego.getJugadores().get(idJugador - 1);
 
+                    if(j.getGanador()!=0){
+                        if(j.getGanador()==idJugador){
+                            Intent intent = new Intent(JuegoActivity.this, Ganador.class);
+                            JuegoActivity.this.startActivity(intent);
+                        }
+                        else{
+                            Intent intent = new Intent(JuegoActivity.this, perdedor.class);
+                            JuegoActivity.this.startActivity(intent);
+                        }
+                    }
+
                     if (juego.getTurno() == idJugador) { //verificar si le toca jugar
                         if (juego.getJugadoresOk().contains(idJugador)) //verificar si tiene fichas para jugar
                             tomarDePozo.setVisibility(View.INVISIBLE);
@@ -621,7 +655,9 @@ public class JuegoActivity extends AppCompatActivity {
                     if (j.getFichasJugadas().size() > 0) {
                         for (Ficha f : j.getFichasJugadas()) {
                             ImageView fichaEnJuego = ponerImagenFicha(f);
+                            //fichaEnJuego.setBackgroundResource(R.drawable.dropped);
                             fichaEnJuego.setRotation(f.getOrientacion());
+                            fichaEnJuego.setPadding(0,0,20,0);
                             layoutDropZone.addView(fichaEnJuego);
                         }
                         ImageView imageDropZone2 = new ImageView(context);
@@ -680,6 +716,17 @@ public class JuegoActivity extends AppCompatActivity {
                 Juego j=gson.fromJson(dataIncoming.getData(), Juego.class);
                 juego=j;
                 Jugador jug=juego.getJugadores().get(idJugador-1);
+
+                if(j.getGanador()!=0){
+                    if(j.getGanador()==idJugador){
+                        Intent intent = new Intent(JuegoActivity.this, Ganador.class);
+                        JuegoActivity.this.startActivity(intent);
+                    }
+                    else{
+                        Intent intent = new Intent(JuegoActivity.this, perdedor.class);
+                        JuegoActivity.this.startActivity(intent);
+                    }
+                }
 
                 ImageView image = ponerImagenFicha(fichaPozo);
                 image.setTag(new customTag(fichaPozo.getNumIzq(),fichaPozo.getNumDer(),fichaPozo.getEsDoble()));
