@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private Button botonJugar;
     private static DataOutputStream dataOut;
     private static DataInputStream dataIn;
+    private boolean verifica1vez,verifica2vez;
 
 
     @Override
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        verifica1vez=false;
+        verifica2vez=false;
         botonJugar=(Button) findViewById(R.id.button);
         spinnerCantidadJugadores=(Spinner) findViewById(R.id.spinner);
 
@@ -68,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
+
                 Accion dataIncoming = gson.fromJson(result, Accion.class);
                 if (dataIncoming.getError() == 0) {
                     String idJ = gson.fromJson(dataIncoming.getData(), String.class);
@@ -78,19 +82,20 @@ public class MainActivity extends AppCompatActivity {
                     new obtenerIdTask().execute();
                 }
 
+
         }
 
         @Override
         protected String doInBackground(Void... params) {
             try {
 
-                accion.setTipo(1);
-                accion.setMensaje("Iniciar nuevo Juego o unirse?");
-                accion.setData(this.gson.toJson(cantJugadores));
-                accion.setError(0);
-                dataOut.writeUTF(this.gson.toJson(accion));
-                dataOut.flush();
-                return dataIn.readUTF();
+                    accion.setTipo(1);
+                    accion.setMensaje("Iniciar nuevo Juego o unirse?");
+                    accion.setData(this.gson.toJson(cantJugadores));
+                    accion.setError(0);
+                    dataOut.writeUTF(this.gson.toJson(accion));
+                    dataOut.flush();
+                    return dataIn.readUTF();
             } catch (IOException ex) {
                 ex.getMessage();
             }
@@ -111,13 +116,14 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(String result) {
+                if(!result.equals("Error")){
                     Accion dataIncoming = gson.fromJson(result, Accion.class);
-                    String data=gson.fromJson(dataIncoming.getData(), String.class);
+                    String data = gson.fromJson(dataIncoming.getData(), String.class);
 
-                    if(data.equals("1")){ //Hay un juego en curso por lo que lo envia al juego activity
+                    if (data.equals("1")) { //Hay un juego en curso por lo que lo envia al juego activity
                         new obtenerIdTask().execute();
                     }
-
+                }
 
 
 
@@ -126,14 +132,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected String doInBackground(Void... params) {
             try {
-                socket socket= com.domino.socket.getInstancia();
-                dataOut=new DataOutputStream(socket.getSocket().getOutputStream());
-                dataIn = new DataInputStream(socket.getSocket().getInputStream());
-                accion.setTipo(0);
-                accion.setError(0);
-                dataOut.writeUTF(this.gson.toJson(accion));
-                dataOut.flush();
-                return dataIn.readUTF();
+                if(verifica1vez==false){
+                    socket socket= com.domino.socket.getInstancia();
+                    dataOut=new DataOutputStream(socket.getSocket().getOutputStream());
+                    dataIn = new DataInputStream(socket.getSocket().getInputStream());
+                    accion.setTipo(0);
+                    accion.setError(0);
+                    dataOut.writeUTF(this.gson.toJson(accion));
+                    dataOut.flush();
+                    verifica1vez=true;
+                    return dataIn.readUTF();
+                }
+                else return "Error";
             } catch (IOException ex) {
                 ex.getMessage();
             }
@@ -154,30 +164,34 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Accion dataIncoming = gson.fromJson(result, Accion.class);
-            String data=gson.fromJson(dataIncoming.getData(), String.class);
-            if(data.equals("-1")){
-                Toast.makeText(MainActivity.this, "Juego lleno, intente mas tarde",Toast.LENGTH_LONG).show();
-                botonJugar.setEnabled(false);
+            if(!result.equals("Error")) {
+                Accion dataIncoming = gson.fromJson(result, Accion.class);
+                String data = gson.fromJson(dataIncoming.getData(), String.class);
+                if (data.equals("-1")) {
+                    Toast.makeText(MainActivity.this, "Juego lleno, intente mas tarde", Toast.LENGTH_LONG).show();
+                    botonJugar.setEnabled(false);
+                } else {
+                    Intent intent = new Intent(MainActivity.this, JuegoActivity.class);
+                    intent.putExtra("idJugador", data);
+                    MainActivity.this.startActivity(intent);
+                }
+
+
             }
-            else {
-                Intent intent = new Intent(MainActivity.this, JuegoActivity.class);
-                intent.putExtra("idJugador", data);
-                MainActivity.this.startActivity(intent);
-            }
-
-
-
         }
 
         @Override
         protected String doInBackground(Void... params) {
             try {
-                accion.setTipo(5);
-                accion.setError(0);
-                dataOut.writeUTF(this.gson.toJson(accion));
-                dataOut.flush();
-                return dataIn.readUTF();
+                if(verifica2vez==false){
+                    accion.setTipo(5);
+                    accion.setError(0);
+                    dataOut.writeUTF(this.gson.toJson(accion));
+                    dataOut.flush();
+                    verifica2vez=true;
+                    return dataIn.readUTF();
+                }
+                else return "Error";
             } catch (IOException ex) {
                 ex.getMessage();
             }

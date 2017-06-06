@@ -1,104 +1,88 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:orientation="horizontal"
-        android:layout_gravity="center|right"
-        android:layout_marginTop="10dp">
-        <TextView
-            android:id="@+id/turnotext"
-            android:layout_width="550dp"
-            android:layout_height="30dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:text="Turno del Jugador:   "
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:gravity="right"/>
-        <TextView
-            android:id="@+id/turno"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_alignEnd="@id/turnotext"
-            android:text="1"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:gravity="left"/>
-    </LinearLayout>
 
+    <TextView
+        android:id="@+id/turnotext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
+        android:text="Turno del Jugador:   "
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
 
-
+    <TextView
+        android:id="@+id/turno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@id/turnotext"
+        android:layout_marginTop="10dp"
+        android:text="1"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
 
 
     <HorizontalScrollView
         android:layout_width="fill_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="50dp"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="70dp"
         android:id="@+id/scrollDropZone"
         >
 
         <LinearLayout
-            android:id="@+id/LayoutDropZone"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
+            android:layout_height="70dp"
+            android:paddingRight="10dp"
+            android:orientation="horizontal"
             android:layout_alignTop="@id/turno"
-            android:layout_gravity="center"
-            android:orientation="horizontal">
+            android:id="@+id/LayoutDropZone"
+
+            >
 
 
         </LinearLayout>
 
     </HorizontalScrollView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_marginTop="30dp">
+    <HorizontalScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="160dp"
+        android:layout_alignTop="@id/scrollDropZone"
+        android:id="@+id/scrollfichasJugador"
+        >
 
-        <HorizontalScrollView
-            android:layout_width="450dp"
-            android:layout_height="fill_parent"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="70dp"
-            android:layout_alignTop="@id/scrollDropZone"
-            android:id="@+id/scrollfichasJugador">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/Layout_fichas_jugador"
+            android:layout_alignTop="@id/LayoutDropZone"
+            android:layout_width="500dp"
+            android:layout_height="70dp"
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:id="@+id/Layout_fichas_jugador"
-                android:layout_alignTop="@id/LayoutDropZone"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp"
-                android:layout_width="520dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center">
+            android:gravity="center_horizontal"
+            >
 
-            </LinearLayout>
+        </LinearLayout>
 
-        </HorizontalScrollView>
-
-        <ImageButton
-            android:id="@+id/agregarFicha"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignTop="@id/scrollDropZone"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_toEndOf="@id/scrollfichasJugador"
-            app:srcCompat="@android:drawable/ic_input_add" />
-    </LinearLayout>
+    </HorizontalScrollView>
 
 
-</LinearLayout>
+    <ImageButton
+        android:id="@+id/agregarFicha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/scrollDropZone"
+        android:layout_marginTop="170dp"
+        android:layout_marginLeft="-70dp"
+        android:layout_toEndOf="@id/scrollfichasJugador"
+        app:srcCompat="@android:drawable/ic_input_add" />
+
+
+</RelativeLayout>

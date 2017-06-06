@@ -171,6 +171,10 @@ public class Control {
                     }
                     return true;
                 }
+                else if(this.juego.getFichasDelPozo().isEmpty()){
+                        this.setSiguienteTurno();
+                        return false;
+                    }
             }
             break;
         }

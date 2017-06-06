@@ -149,6 +149,9 @@ public class ServerConnection extends Thread{
                             }else{
                                 response.setMensaje("ERROR: No se pudo comer la ficha!");
                                 response.setError(1);
+                                response.setData(this.server.gson.toJson(this.server.ctrl.juego));
+                                this.sendDataToAllClients(this.server.gson.toJson(response));
+                                break;
                             }                       
 //                        }else{
 //                            response.setMensaje("ERROR: jugada no valida!");

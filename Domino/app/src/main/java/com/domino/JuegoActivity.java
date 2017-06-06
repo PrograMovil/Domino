@@ -354,7 +354,7 @@ public class JuegoActivity extends AppCompatActivity {
                                 primerTurno=true;
                             }
                             else{
-                                Toast.makeText(getApplicationContext(), "Debe mover la ficha mayor",Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "Debe mover la ficha doble mayor que tenga",Toast.LENGTH_LONG).show();
                                 break;
                             }
                         }else if(t1.numIzq==juego.getOpDeJuegoALaIzq()){
@@ -578,6 +578,57 @@ public class JuegoActivity extends AppCompatActivity {
                     }
 
                 }
+                else if(dataIncoming.getMensaje().equals("ERROR: No se pudo comer la ficha!")){
+                    Juego j=gson.fromJson(dataIncoming.getData(), Juego.class);
+                    juego=j;
+                    idTurno.setText(Integer.toString(juego.getTurno()));
+                    Jugador jug=juego.getJugadores().get(idJugador-1);
+
+                    if(j.getGanador()!=0){
+                        if(j.getGanador()==idJugador){
+                            Intent intent = new Intent(JuegoActivity.this, Ganador.class);
+                            JuegoActivity.this.startActivity(intent);
+                        }
+                        else{
+                            Intent intent = new Intent(JuegoActivity.this, perdedor.class);
+                            JuegoActivity.this.startActivity(intent);
+                        }
+                    }
+
+                    if(juego.getTurno()==idJugador){ //verificar si le toca jugar
+                        if(juego.getJugadoresOk().contains(idJugador)) //verificar si tiene fichas para jugar
+                            tomarDePozo.setVisibility(View.INVISIBLE);
+                        else tomarDePozo.setVisibility(View.VISIBLE); //habilitar boton para tomar del pozo
+                    }
+
+                    LinearLayout layoutDropZone = (LinearLayout) findViewById(R.id.LayoutDropZone);
+                    if(layoutDropZone.getChildCount() > 0)
+                        layoutDropZone.removeAllViews();
+
+                    ImageView imageDropZone = new ImageView(context);
+                    imageDropZone.setImageResource(R.drawable.dropzone);
+                    imageDropZone.setTag("izquierda");
+                    imageDropZone.setOnDragListener(new MyDragListener());
+                    layoutDropZone.addView(imageDropZone);
+
+                    if(j.getFichasJugadas().size()>0){
+                        for(Ficha f : j.getFichasJugadas()){
+                            ImageView fichaEnJuego = ponerImagenFicha(f);
+                            //fichaEnJuego.setBackgroundResource(R.drawable.dropped);
+                            fichaEnJuego.setPadding(0,0,20,0);
+                            fichaEnJuego.setRotation(f.getOrientacion());
+                            layoutDropZone.addView(fichaEnJuego);
+                        }
+                        ImageView imageDropZone2 = new ImageView(context);
+                        imageDropZone2.setImageResource(R.drawable.dropzone);
+                        imageDropZone2.setTag("derecha");
+                        imageDropZone2.setOnDragListener(new MyDragListener());
+                        layoutDropZone.addView(imageDropZone2);
+                    }
+                    if(j.getTurno()!=idJugador){
+                        new esperaDataIn(context).execute();
+                    }
+                }
             }
         }
 
@@ -657,7 +708,7 @@ public class JuegoActivity extends AppCompatActivity {
                             ImageView fichaEnJuego = ponerImagenFicha(f);
                             //fichaEnJuego.setBackgroundResource(R.drawable.dropped);
                             fichaEnJuego.setRotation(f.getOrientacion());
-                            fichaEnJuego.setPadding(0,0,0,0);
+                            fichaEnJuego.setPadding(0,0,20,0);
                             layoutDropZone.addView(fichaEnJuego);
                         }
                         ImageView imageDropZone2 = new ImageView(context);
@@ -745,6 +796,9 @@ public class JuegoActivity extends AppCompatActivity {
                     new esperaDataIn(context).execute();
                 }
 
+            }
+            else{ //se acabaron las fichas del pozo
+                new esperaDataIn(context).execute();
             }
         }
 
