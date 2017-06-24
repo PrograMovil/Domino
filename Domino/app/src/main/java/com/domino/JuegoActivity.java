@@ -70,6 +70,8 @@ public class JuegoActivity extends AppCompatActivity {
                     }
                     else{
                         Toast.makeText(getApplicationContext(), "No quedan fichas en el pozo, game Over",Toast.LENGTH_LONG).show();
+                        new esperaDataIn(getApplicationContext()).execute();
+                        tomarDePozo.setVisibility(View.INVISIBLE);
                     }
                 }
                 else{

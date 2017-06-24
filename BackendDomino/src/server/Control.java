@@ -168,6 +168,7 @@ public class Control {
                     this.jugadoresHabilitados();
                     if(this.juego.getFichasDelPozo().isEmpty()){
                         this.setSiguienteTurno();
+                        return false;
                     }
                     return true;
                 }
